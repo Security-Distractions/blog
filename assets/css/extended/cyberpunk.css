@@ -215,7 +215,17 @@ body::after {
   transition: border-color .22s ease;
 }
 
-.post-entry > * { position: relative; z-index: 1; }
+/* Lift content above the ::before/::after panel layers — but never touch
+   .entry-link: PaperMod absolutely-positions it as the card's click target,
+   and forcing position:relative collapses it and kills the link. */
+.post-entry > :not(.entry-link) { position: relative; z-index: 1; }
+
+.post-entry > .entry-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 0;
+}
 
 .post-entry:hover {
   transform: translateY(-3px);
