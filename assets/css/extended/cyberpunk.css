@@ -177,6 +177,34 @@ body::after {
   color: var(--neon-magenta);
 }
 
+/* ---------- brand logo in the hero ---------- */
+
+.site-logo-heading {
+  margin: 0 0 4px;
+  line-height: 0;            /* kill descender gap under the image */
+  animation: none;           /* the artwork has its own glitch baked in */
+  text-shadow: none;
+}
+
+.site-logo {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  /* the artwork is on pure black — screen blending drops it into the page
+     so there is no visible box edge against the near-black background */
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 34px rgba(255, 45, 149, 0.28));
+}
+
+@media (max-width: 700px) {
+  .site-logo { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-logo { filter: none; }
+}
+
 /* ---------- post cards: neon-outlined octagon panels ---------- */
 
 .post-entry {
