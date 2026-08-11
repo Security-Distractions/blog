@@ -586,3 +586,87 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   .cta-button { transition: none; }
   .cta-button:hover, .cta-button:focus-visible { transform: none; }
 }
+
+/* ------------------------------------------------------- student link cards
+   Grid of resource cards. Accent colour is per-card so a group of links is
+   distinguishable at a glance; the cut corner matches .post-entry. */
+.link-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 18px 0 28px;
+}
+
+.link-card {
+  --accent: var(--neon-cyan);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: var(--panel-hi);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut-sm)), calc(100% - var(--cut-sm)) 100%, 0 100%);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+a.link-card:hover,
+a.link-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 0 22px -8px var(--accent);
+}
+
+a.link-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.link-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--primary);
+  letter-spacing: 0.01em;
+}
+
+.link-card-tag {
+  align-self: flex-start;
+  padding: 1px 7px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
+  opacity: 0.85;
+}
+
+.link-card-desc { font-size: 0.88rem; color: var(--secondary); line-height: 1.45; }
+
+.link-card-host {
+  margin-top: 2px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+/* Placeholder for links that don't exist yet. */
+.link-card.is-pending { opacity: 0.55; border-left-style: dashed; cursor: default; }
+.link-card.is-pending .link-card-title { color: var(--secondary); }
+
+.link-card.accent-cyan    { --accent: var(--neon-cyan); }
+.link-card.accent-magenta { --accent: var(--neon-magenta); }
+.link-card.accent-emerald { --accent: var(--neon-emerald); }
+.link-card.accent-amber   { --accent: var(--neon-amber); }
+.link-card.accent-violet  { --accent: var(--neon-violet); }
+
+@media (prefers-reduced-motion: reduce) {
+  .link-card { transition: none; }
+  a.link-card:hover, a.link-card:focus-visible { transform: none; }
+}
+
+/* PaperMod underlines links inside post content. A whole card is one link, so
+   that underlines every line in it — strip it and let the border/glow carry
+   the affordance. */
+.post-content a.link-card,
+.post-content a.link-card:hover,
+.post-content a.link-card * { text-decoration: none !important; box-shadow: none; }
