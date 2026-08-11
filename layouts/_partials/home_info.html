@@ -21,6 +21,19 @@
         {{ $opts := dict "display" "block" }}
         {{ .Content | $.Page.RenderString $opts }}
     </div>
+    {{- with site.Params.cta }}
+    {{- if .url }}
+    {{- /* Call-to-action for the CTI Agent. rel=nofollow keeps crawlers from
+           indexing the app itself; the blog is public and indexed. */}}
+    <div class="home-cta">
+        <a class="cta-button" href="{{ .url }}" rel="noopener nofollow">
+            {{ with .icon }}<span class="cta-icon" aria-hidden="true">{{ . }}</span>{{ end }}
+            <span>{{ .text | default "Open" }}</span>
+        </a>
+        {{- with .note }}<p class="cta-note">{{ . | markdownify }}</p>{{ end }}
+    </div>
+    {{- end }}
+    {{- end }}
     <footer class="entry-footer">
         {{ partial "social_icons.html" (dict "align" site.Params.homeInfoParams.AlignSocialIconsTo) }}
     </footer>
