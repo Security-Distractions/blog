@@ -1,6 +1,6 @@
 baseURL = "https://securitydistractions.com/"
 languageCode = "en-gb"
-title = "dksec"
+title = "securitydistractions"
 theme = "PaperMod"
 
 enableRobotsTXT = true
@@ -33,7 +33,7 @@ pygmentsUseClasses = true
   comments = false
 
   [params.homeInfoParams]
-    Title = "dksec"
+    Title = "securitydistractions"
     Content = "Malware analysis, detection engineering, and threat intelligence — written up from a home lab."
 
   [[params.socialIcons]]
