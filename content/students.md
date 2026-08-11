@@ -39,12 +39,13 @@ Bookmark this page. Anything you need during the course is linked here.
 
 </div>
 
-## Notes and write-ups
+## Course material
 
 <div class="link-cards">
 
-{{< linkcard title="Obsidian vaults" accent="violet"
-    desc="Course notes as a Git-backed Obsidian vault. Links go here once the repositories are published." >}}
+{{< linkcard title="CTI exercise vault" accent="violet" tag="Obsidian · GitHub"
+    url="https://github.com/dclayton454/cyberbridge-summerschool2026"
+    desc="The threat intelligence exercise. Code → Download ZIP, unzip, then in Obsidian choose Open folder as vault and start at 00 Start Here." >}}
 
 </div>
 
