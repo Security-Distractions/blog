@@ -191,9 +191,18 @@ body::after {
   width: 100%;
   max-width: 620px;
   height: auto;
-  /* the artwork is on pure black — screen blending drops it into the page
-     so there is no visible box edge against the near-black background */
+  /* Screen blending drops the artwork's black into the page. Its background
+     isn't *pure* black though, so the image's bounding box shows as a faint
+     rectangle — the mask feathers all four edges so it dissolves instead. */
   mix-blend-mode: screen;
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0, #000 5%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right,  transparent 0, #000 5%, #000 93%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%);
+  mask-composite: intersect;
   filter: drop-shadow(0 0 34px rgba(255, 45, 149, 0.28));
 }
 
