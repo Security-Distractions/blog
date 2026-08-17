@@ -21,10 +21,6 @@ would have stolen, and a write-up that implies otherwise is guessing.
 
 ## What happened
 
-> Detonated during a workshop as **Sample B**. That label survives in the file paths
-> quoted below because it is what the telemetry recorded — the staging directory really was
-> named that, and renaming it here would misreport the evidence.
-
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 16:59 UTC · **Alert window:** 17:00:00–17:02:15 · **Detections:** 31 Elastic Defend alerts · **Telemetry:** healthy (Defend events + Sysmon logging with correct timestamps — full reconstruction available)
 
 ---
@@ -34,7 +30,7 @@ Venus Stealer is an unsigned Windows executable that, on execution, attempts **C
 
 ## Layer 1: Initial Access / Delivery
 - Archive opened in 7-Zip (`7zFM.exe`), extracted via `7zG.exe x` to `C:\Users\analyst\Downloads\f0a10f8d…272b8\`.
-- Sample staged in `C:\Users\analyst\Downloads\Sample B\`.
+- Sample staged in `C:\Users\analyst\Downloads\sample\`.
 
 ## Layer 2: Execution
 - `explorer.exe` → **Venus Stealer exe** at 16:59:36 (and again 16:59:41) — user execution.

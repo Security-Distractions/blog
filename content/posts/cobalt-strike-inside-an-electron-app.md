@@ -18,10 +18,6 @@ timeline analysis, and a beacon.
 
 ## What happened
 
-> Detonated during a workshop as **Sample E**. That label survives in the file paths
-> quoted below because it is what the telemetry recorded — the staging directory really was
-> named that, and renaming it here would misreport the evidence.
-
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 18:07:15 UTC · **Alert window:** 18:07:44–18:12:15 · **Detections:** 93 alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
 
 ---
@@ -30,7 +26,7 @@ timeline analysis, and a beacon.
 The Cobalt Strike loader is delivered as a **trojanized Electron application** ("wczt-win-8.1.65-x64"). It side-loads shellcode with EDR-evasion (NTDLL unhooking), timestomps dropped files, and beacons to a Telegram-typosquat C2, pulling a stage from an AWS S3 bucket.
 
 ## Layer 1: Delivery & Execution
-- 7-Zip-extracted to `C:\Users\analyst\Downloads\Sample E\`.
+- 7-Zip-extracted to `C:\Users\analyst\Downloads\sample\`.
 - `explorer.exe` → **loader** `39c69cb0…6c4f38.exe` (18:07:15) → spawns **`wczt-win-8.1.65-x64).exe`** (18:07:29) — the trojanized Electron installer.
 
 ## Layer 2: Payload Drop & Install

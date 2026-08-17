@@ -31,10 +31,6 @@ Collapsed to the eight steps that matter, the same path reads like this.
 
 ## What happened
 
-> Detonated during a workshop as **Sample C**. That label survives in the file paths
-> quoted below because it is what the telemetry recorded — the staging directory really was
-> named that, and renaming it here would misreport the evidence.
-
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 17:27:55 UTC · **Alert window:** 17:28:17–17:34:53 · **Detections:** 319 Elastic Defend/SIEM alerts · **Telemetry:** healthy (clock correct; Aug-6 backlog from an earlier snapshot filtered out)
 
 ---
@@ -44,7 +40,7 @@ ValleyRAT is an unsigned **shellcode-injecting loader** with heavy **EDR/AV evas
 
 ## Layer 1: Delivery & Execution
 - 7-Zip (`7zFM.exe`→`7zG.exe x`) extracted the archive to `C:\Users\analyst\Downloads\a43853c1…\`.
-- `explorer.exe` → **Sample C** `C:\Users\analyst\Downloads\Sample C\a43853c1…efdb47c.exe` at 17:27:55 (ProblemChild-flagged), then self-spawned.
+- `explorer.exe` → ValleyRAT `C:\Users\analyst\Downloads\sample\a43853c1…efdb47c.exe` at 17:27:55 (ProblemChild-flagged), then self-spawned.
 
 ## Layer 2: Payload Drop & Shellcode Injection
 - Dropped/ran **`C:\Users\Public\Br3N37\xhMLks.exe`** (launched via `svchost.exe`).

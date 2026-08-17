@@ -234,7 +234,7 @@
        "id": "step-2",
        "type": "Other",
        "technique": "Malicious File via a43853c12573d2dd8792\u2026, xhMLks.exe",
-       "details": "\"C:\\Users\\analyst\\Downloads\\Sample C\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe\" \n\"C:\\Users\\Public\\Br3N37\\xhMLks.exe\"",
+       "details": "\"C:\\Users\\analyst\\Downloads\\sample\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe\" \n\"C:\\Users\\Public\\Br3N37\\xhMLks.exe\"",
        "timestamp": "2026-08-08T17:27:55.8143166Z",
        "mitreAttackId": "T1204.002",
        "mitreAttackName": "Malicious File"

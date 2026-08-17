@@ -20,10 +20,6 @@ would be worse than leaving the field empty.
 
 ## What happened
 
-> Detonated during a workshop as **Sample D**. That label survives in the file paths
-> quoted below because it is what the telemetry recorded — the staging directory really was
-> named that, and renaming it here would misreport the evidence.
-
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 17:47:10 UTC · **Alert window:** 17:47:28–17:51:59 · **Detections:** 25 Elastic Defend alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
 
 ---
@@ -33,7 +29,7 @@ The .NET RAT is a **.NET remote-access trojan (RAT)** with **keylogging**. It se
 
 ## Layer 1: Delivery & Execution
 - 7-Zip (`7zFM.exe`→`7zG.exe x`) extracted to `C:\Users\analyst\Downloads\bc033453…\`.
-- `explorer.exe` → **Sample D** `C:\Users\analyst\Downloads\Sample D\bc033453…e48674.exe` at 17:47:10 (ProblemChild-flagged).
+- `explorer.exe` → the .NET RAT `C:\Users\analyst\Downloads\sample\bc033453…e48674.exe` at 17:47:10 (ProblemChild-flagged).
 
 ## Layer 2: Persistence & Masquerading
 - Self-copied to **`C:\Users\analyst\AppData\Roaming\MPC-AH\AggregatorHost.exe`** (identical SHA256) — masquerading as the legitimate System32 `AggregatorHost.exe` ("Potential Masquerading as System32 Executable").

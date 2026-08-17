@@ -18,10 +18,6 @@ true* being different is the whole lesson.
 
 ## What happened
 
-> Detonated during a workshop as **Sample A**. That label survives in the file paths
-> quoted below because it is what the telemetry recorded — the staging directory really was
-> named that, and renaming it here would misreport the evidence.
-
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 15:59 UTC · **Status:** terminated (no activity after 16:27) · **Detections:** 76 Elastic Defend alerts
 
 ---
@@ -30,7 +26,7 @@ true* being different is the whole lesson.
 The ScreenConnect RMM loader is a **PyInstaller-packaged Python dropper** that installs a **ScreenConnect (ConnectWise Control) RMM** implant for remote access and performs **aggressive Microsoft Defender neutralization**. Delivered as a 7-Zip archive, executed manually by the user.
 
 ## Layer 1: Initial Access / Delivery
-- Archive extracted via **7-Zip** (`7zG.exe x`) to `C:\Users\analyst\Downloads\Sample A\`.
+- Archive extracted via **7-Zip** (`7zG.exe x`) to `C:\Users\analyst\Downloads\sample\`.
 - User launched the sample from Explorer (T1204 User Execution).
 
 ## Layer 2: Execution & Payload
@@ -44,7 +40,7 @@ The ScreenConnect RMM loader is a **PyInstaller-packaged Python dropper** that i
 
 ## Layer 4: Defense Evasion
 - **Defender exclusions** added via **PowerShell AND WMI**:
-  - Paths: `C:\Users\analyst\Downloads\Sample A`, `%Temp%`, `C:\Users\Public\AccountPictures\tesurov`
+  - Paths: `C:\Users\analyst\Downloads\sample`, `%Temp%`, `C:\Users\Public\AccountPictures\tesurov`
   - Drives: `D:` `E:` `F:` `G:` `X:` `Y:` `Z:`
   - Processes: `cmd.exe`, `clip.exe`
 - **UAC disabled** via registry modification.

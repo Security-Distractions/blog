@@ -272,10 +272,10 @@
               "id": "act-1rIHyUux",
               "type": "Execution",
               "technique": "T1204.002 Malicious File",
-              "details": "\"C:\\Users\\analyst\\Downloads\\Sample C\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe\" "
+              "details": "\"C:\\Users\\analyst\\Downloads\\sample\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe\" "
             }
           ],
-          "description": "C:\\Users\\analyst\\Downloads\\Sample C\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe  [repeated 2x until 17:28:08 UTC]",
+          "description": "C:\\Users\\analyst\\Downloads\\sample\\a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe  [repeated 2x until 17:28:08 UTC]",
           "isCompromised": true,
           "investigationStatus": "Investigating",
           "displaySettings": {
