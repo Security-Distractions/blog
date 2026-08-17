@@ -1,7 +1,8 @@
 ---
-title: "A Cobalt Strike beacon inside a trojanised Electron app"
+title: "Cobalt Strike beacon delivered inside a trojanised Electron application"
 date: 2026-08-17T11:21:07Z
 draft: false
+aliases: ["/posts/cobalt-strike-inside-an-electron-app/"]
 tags: ["malware", "detonation", "elastic", "detection", "cobalt-strike", "shellcode"]
 summary: "A trojanised Electron installer that presents as an ordinary desktop application unhooked ntdll, timestomped itself, and ran a Cobalt Strike beacon. 101 alerts across 15 rules."
 ---
@@ -14,8 +15,8 @@ summary: "A trojanised Electron installer that presents as an ordinary desktop a
   to `%AppData%`, so a malicious install resembles a legitimate one in endpoint telemetry.
 - The loader attempted to **unhook `ntdll`** to strip userland API hooks, and **timestomped** its
   artefacts to blunt timeline analysis.
-- The unhooking did not prevent detection. Behavioural and kernel-level telemetry surfaced the activity
-  regardless — the practical argument against relying on a single instrumented layer.
+- The unhooking **did not suppress detection**: memory and behavioural telemetry recorded the
+  injection regardless, because neither depends on the userland hooks being removed.
 - Command and control was confirmed to a Telegram typosquat domain and two addresses, with the payload
   staged from an S3 bucket.
 {{< /takeaways >}}
@@ -57,15 +58,11 @@ The Cobalt Strike loader is delivered as a **trojanized Electron application** (
 
 {{< alerts key="cobalt_strike_electron_trojan" >}}
 
-## Assessment
+## Evasion outcome
 
-The `ntdll` unhooking is the notable failure. The technique exists to remove the userland hooks that
-endpoint products install to observe API calls; done successfully, a whole class of behavioural
-detection goes quiet.
-
-It fired anyway, because Elastic Defend does not depend solely on the hooks being removed. Kernel-level
-and behavioural telemetry recorded the activity while the evasion was in progress. The evasion was
-competent, and it still surfaced.
+The `ntdll` unhooking attempt failed to suppress detection. Behavioural and memory-based telemetry
+recorded the shellcode injection while the unhooking was in progress, because that telemetry does not
+depend on the userland hooks the sample was removing.
 
 ## Indicators
 

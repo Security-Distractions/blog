@@ -1,9 +1,10 @@
 ---
-title: "RMM abuse, and a threat-intel label that did not survive scrutiny"
+title: "PyInstaller dropper installs ScreenConnect and blankets Defender with exclusions"
 date: 2026-08-17T11:46:07Z
 draft: false
+aliases: ["/posts/rmm-abuse-and-a-rejected-attribution/"]
 tags: ["malware", "detonation", "elastic", "detection", "rmm", "screenconnect", "threat-intel"]
-summary: "A PyInstaller dropper installed ScreenConnect as its remote access and blanketed Defender with exclusions. Its threat-intel label says ransomware; the evidence says otherwise, and the label is published here unused."
+summary: "A PyInstaller dropper deployed ScreenConnect as its remote access, excluded whole drive letters from Microsoft Defender, and disabled UAC and script-block logging. Its threat-intel label says ransomware; the evidence does not support it."
 ---
 
 {{< takeaways >}}
@@ -17,8 +18,7 @@ summary: "A PyInstaller dropper installed ScreenConnect as its remote access and
 - **The threat-intel label was rejected.** ThreatFox lists this hash as `elf.kuiper` at confidence 95.
   Kuiper is ransomware; the artefact is a Windows PE rather than an ELF binary, and nothing in the
   detonation encrypted anything. The label is recorded below and deliberately unused in the title.
-- Alerts for this sample were never linked to its case record, so the 102 counted here were recovered
-  by querying the alert index across the detonation window.
+
 {{< /takeaways >}}
 
 ## Case Summary
@@ -71,20 +71,15 @@ Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon)
 
 {{< alerts key="rmm_abuse_loader_screenconnect" >}}
 
-## Assessment: the rejected attribution
+## Attribution
 
-ThreatFox lists this hash as `elf.kuiper` at confidence 95. Kuiper is ransomware.
+ThreatFox labels this hash `elf.kuiper` at confidence 95. Kuiper is ransomware, and the label is not
+adopted here for three reasons: MalwareBazaar reports the artefact as a Windows PE (`magika: pebin`)
+rather than an ELF binary, nothing in the detonation encrypted a file, and the observed behaviour —
+RMM deployment with Defender exclusions — is not consistent with ransomware at this stage.
 
-Three observations contradict it. MalwareBazaar reports the artefact as a Windows PE — `magika: pebin`
-— not an ELF binary, so the family prefix is wrong about the platform. Nothing in the detonation
-encrypted a file. And the observed behaviour, RMM deployment plus Defender exclusions, is not what
-ransomware does at this stage.
-
-A Kuiper-adjacent loader whose ransomware stage never executed remains possible. That is a hypothesis,
-not an attribution, and not sufficient to name the sample after it.
-
-Confidence 95 from a community feed is a starting point for investigation rather than a verdict. A
-detonation is how you establish which one you are holding.
+A Kuiper-adjacent loader whose ransomware stage never executed cannot be excluded, but nothing
+observed supports it.
 
 ## Indicators
 

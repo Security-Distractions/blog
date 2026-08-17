@@ -1,9 +1,10 @@
 ---
-title: "A .NET RAT with no name"
+title: "Unattributed .NET RAT: keylogging, Run-key persistence and System32 masquerading"
 date: 2026-08-17T10:31:07Z
 draft: false
+aliases: ["/posts/dotnet-rat-with-no-name/"]
 tags: ["malware", "detonation", "elastic", "detection", "rat", "keylogger"]
-summary: "Keylogging, Run-key persistence, masquerading as a Windows binary — and no family attribution available from any source. What a write-up looks like when the intel comes back empty."
+summary: "A .NET remote-access trojan self-copied under a Windows binary name, established Run-key persistence, and collected keystrokes. No family attribution is available from any source."
 ---
 
 {{< takeaways >}}
@@ -53,15 +54,14 @@ The .NET RAT is a **.NET remote-access trojan (RAT)** with **keylogging**. It se
 
 {{< alerts key="dotnet_rat_keylogger" >}}
 
-## Assessment
+## Attribution
 
-Reaching for the nearest well-known .NET RAT would be easy — several exist, they behave similarly, and
-one would sound plausible. That reasoning is how incorrect attributions enter circulation and then get
-cited.
+No family label is available. The hash has no ThreatFox entry, no MalwareBazaar signature, and is
+unknown to the threat-intel feeds ingested in this environment. MalwareBazaar's TrID output identifies
+the artefact only as a Generic CIL (.NET) executable.
 
-What the detonation established is concrete: the persistence mechanism, the masquerade, the collection
-capability, and the ten rules that fired. A defender can act on each of those without a family name.
-The name would be useful. It is not load-bearing.
+The observed capability is nonetheless complete: the persistence mechanism, the masquerade and the
+keystroke collection are all documented above, and each is actionable without a family name.
 
 ## Indicators
 

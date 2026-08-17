@@ -1,9 +1,10 @@
 ---
-title: "ValleyRAT: 324 alerts, 39 rules, and the problem with volume"
+title: "ValleyRAT: shellcode injection, SYSTEM-level Defender tampering and confirmed C2"
 date: 2026-08-17T12:11:07Z
 draft: false
+aliases: ["/posts/valleyrat-324-alerts-39-rules/"]
 tags: ["malware", "detonation", "elastic", "detection", "valleyrat", "edr-evasion"]
-summary: "A ValleyRAT shellcode loader was detonated in an isolated lab. It produced 324 alerts across 39 detection rules in under eight minutes — and four of those rules carried the entire story."
+summary: "A ValleyRAT loader injected unbacked shellcode, escalated to SYSTEM, neutralised Microsoft Defender through scheduled tasks, established service and Run-key persistence, and beaconed to three confirmed C2 addresses."
 ---
 
 {{< takeaways >}}
@@ -15,8 +16,8 @@ summary: "A ValleyRAT shellcode loader was detonated in an isolated lab. It prod
   and side-loaded through two DLLs written to user-writable directories.
 - Command and control was confirmed against three addresses, one matching a threat-intel indicator
   already present in the environment.
-- **39 rules fired, producing 324 alerts. Four carried the finding.** The remaining 35 were duplicates
-  of those four or single-shot noise — a cost measured in analyst attention, not a measure of coverage.
+- 39 rules produced 324 alerts in roughly seven minutes. Four evidenced the findings: the shellcode
+  injection, the scheduled-task persistence, the Defender tampering and the threat-intel hash match.
 {{< /takeaways >}}
 
 ## Case Summary
@@ -66,13 +67,9 @@ Collapsed to the steps that matter, the same path reads as follows.
 
 {{< alerts key="valleyrat_shellcode_loader" >}}
 
-Thirty-nine rules fired. The four that carried the story were the shellcode injection, the
-scheduled-task persistence, the Defender tampering and the threat-intel hash match. The rest were
-duplicates of those or fired once each.
-
-That distinction matters because 324 alerts is the kind of number quoted as coverage. It is not
-coverage, it is redundancy, and redundancy costs analyst attention. Running detonations against your
-own ruleset is how you learn which rules carry signal and which are along for the ride.
+Four rules evidenced the findings: the shellcode injection, the scheduled-task persistence, the
+Defender tampering and the threat-intel hash match. The remainder duplicated coverage of those
+behaviours or fired once each.
 
 ## Indicators
 

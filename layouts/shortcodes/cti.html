@@ -41,35 +41,8 @@
     <dd>{{ with $d.first }}{{ substr . 0 10 }} at {{ substr . 11 5 }} UTC{{ end }} on <code>{{ . }}</code></dd>
     {{- end }}
   </dl>
-  {{- with $d.iocs }}
-  <div class="cti-iocs">
-    <span class="cti-iocs-title">Indicators</span>
-    <ul>
-      {{- /* every indicator carries what it actually is; anything that could not be
-             identified from the feeds, the alerts or the analysis is not listed at all */ -}}
-      {{- range . }}
-      <li><span class="ioc-type">{{ .type }}</span> <code>{{ .value }}</code>
-        {{- with .note }} <span class="ioc-note">— {{ . }}</span>{{ end }}
-        {{- with .path }}<br><span class="ioc-path">{{ . }}</span>{{ end }}</li>
-      {{- end }}
-    </ul>
-  </div>
-  {{- end }}
-  {{- if $d.no_network }}
-  {{- /* stated explicitly: benign OS/browser traffic is not an indicator, and listing it
-         is how someone ends up alerting on Windows telemetry */}}
-  <p class="cti-nonet">No network indicators. Nothing belonging to this sample reached the network,
-    so the only destinations in the window were ordinary operating-system and browser traffic — which
-    are not indicators and are deliberately not listed.</p>
-  {{- end }}
-  {{- with $d.tactics }}
-  <div class="cti-tactics">
-    <span class="cti-iocs-title">Tactics seen in alerts</span>
-    <span class="cti-tactic-chips">
-      {{- range . }}<span class="tactic-chip">{{ .name }} <em>{{ .count }}</em></span>{{ end -}}
-    </span>
-  </div>
-  {{- end }}
+  {{- /* Indicators and ATT&CK have their own sections; this panel carries attribution only,
+         so the same facts are not printed three times in one report. */ -}}
   <p class="cti-foot">Family attribution from the abuse.ch ThreatFox and MalwareBazaar feeds,
     matched by exact SHA256. Community-sourced labels, treated as evidence rather than ground truth.</p>
 </div>

@@ -1,9 +1,10 @@
 ---
-title: "Venus Stealer: a stealer that never got to steal"
+title: "Venus Stealer: COM hijack and application shimming, with C2 that never resolved"
 date: 2026-08-17T10:56:07Z
 draft: false
+aliases: ["/posts/venus-stealer-that-never-stole/"]
 tags: ["malware", "detonation", "elastic", "detection", "venus-stealer", "dns"]
-summary: "The sample established persistence, reached for its command and control over DNS, and got nothing — the domain never resolved. What can and cannot be concluded from a detonation that half-failed."
+summary: "A Venus Stealer sample established persistence through application shimming and a COM registry override, then queried DNS for a .top command-and-control domain that never resolved. No collection was observed."
 ---
 
 {{< takeaways >}}
@@ -59,16 +60,15 @@ Venus Stealer is an unsigned Windows executable that, on execution, attempts **C
 
 {{< alerts key="venus_stealer_com_hijack_dns_c2" >}}
 
-## Assessment
+## Attribution and limits of the evidence
 
-This detonation is useful precisely because it did not complete.
+ThreatFox labels this hash `py.venus_stealer` at confidence 95, which is consistent with a
+Python-packed stealer and is adopted here.
 
-What is established: the persistence, because it was observed happening, and the intent to reach a
-`.top` domain, because the query is in the telemetry. What is not established: what the sample would
-have collected. A write-up implying otherwise would be guessing.
-
-"ThreatFox says Venus Stealer" and "credential theft was observed" are different grades of evidence,
-and they are not interchangeable even when both appear in the same report.
+The collection stage was never observed. The C2 domain did not resolve, no session was established
+and nothing was exfiltrated, so the family attribution rests on the indicator match rather than on
+observed credential theft. The persistence and the C2 attempt are directly evidenced; the stealing
+capability is not.
 
 ## Indicators
 
