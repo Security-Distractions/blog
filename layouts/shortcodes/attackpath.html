@@ -1,0 +1,74 @@
+{{- /*
+  Renders a Compromise Canvas on-host attack path as an ordered chain, straight from the
+  exported canvas JSON — so the post shows the same path the tool does, and can't drift
+  out of date the way a screenshot would.
+
+    {{< attackpath key="pyarmor_pyinstaller_loader" download="https://..." >}}
+
+  Reads site.Data.attackpaths.<key> and walks diagram.nodes to find the host node carrying
+  data.actions (the on-host steps added in SagaLabs/CompromiseCanvas#21). Steps are rendered
+  in array order, because array order *is* the path — timestamps can be missing, identical
+  or skewed, and the analyst's reconstruction is what matters.
+
+  Each action carries: type (tactic), technique (what happened), details (the command line),
+  timestamp, mitreAttackId, mitreAttackName.
+
+  Params:
+    key      (required) data file under data/attackpaths/, underscores not hyphens
+    download optional URL to the canvas JSON, rendered as a footer link
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $c := index site.Data.attackpaths $key -}}
+{{- if not $c -}}
+  {{- errorf "attackpath: no canvas data for key %q (looked in data/attackpaths/%s.json)" $key $key -}}
+{{- end -}}
+{{- $steps := slice -}}
+{{- $host := "" -}}
+{{- $ip := "" -}}
+{{- range $c.diagram.nodes -}}
+  {{- with .data -}}
+    {{- if and (eq (len $steps) 0) .actions (gt (len .actions) 0) -}}
+      {{- $steps = .actions -}}
+      {{- $host = .label | default .hostname | default "host" -}}
+      {{- $ip = .ipAddress | default "" -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if eq (len $steps) 0 -}}
+  {{- errorf "attackpath: canvas %q has no node carrying data.actions" $key -}}
+{{- end -}}
+<figure class="attack-path">
+  <figcaption class="attack-path-head">
+    <span class="attack-path-title">On-host attack path</span>
+    <span class="attack-path-host">{{ $host }}{{ with $ip }} <span class="attack-path-ip">{{ . }}</span>{{ end }}</span>
+    <span class="attack-path-meta">{{ len $steps }} steps</span>
+  </figcaption>
+  <ol class="attack-steps">
+    {{- range $i, $s := $steps }}
+    {{- $tactic := $s.type | default "Other" }}
+    <li class="attack-step">
+      <span class="attack-step-num">{{ add $i 1 }}</span>
+      <div class="attack-step-body">
+        <span class="attack-step-tags">
+          <span class="attack-step-tactic tactic-{{ lower (replace $tactic " " "-") }}">{{ $tactic }}</span>
+          {{- with $s.mitreAttackId }}
+          <a class="attack-step-mitre" rel="noopener nofollow"
+             href="https://attack.mitre.org/techniques/{{ replace . "." "/" }}/">{{ . }}</a>
+          {{- end }}
+          {{- with $s.timestamp }}<span class="attack-step-time">{{ substr . 11 8 }}</span>{{ end }}
+        </span>
+        <p class="attack-step-what">{{ with $s.mitreAttackName }}{{ . }}{{ else }}{{ $s.technique }}{{ end }}</p>
+        {{- with $s.technique }}<p class="attack-step-sub">{{ . }}</p>{{ end }}
+        {{- with $s.details }}<pre class="attack-step-details"><code>{{ . }}</code></pre>{{ end }}
+      </div>
+    </li>
+    {{- end }}
+  </ol>
+  {{- with .Get "download" }}
+  <p class="attack-path-foot">
+    <a href="{{ . }}" rel="noopener">Download the canvas JSON</a> and import it into
+    <a href="https://github.com/SagaLabs/CompromiseCanvas" rel="noopener nofollow">CompromiseCanvas</a>
+    — double-click the host node to walk these steps interactively.
+  </p>
+  {{- end }}
+</figure>

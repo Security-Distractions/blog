@@ -1,0 +1,237 @@
+{
+  "slug": "cobalt-strike-electron-trojan",
+  "folder": "2026-08-08-cobalt-strike-electron-trojan",
+  "title": "Cobalt Strike \u2014 shellcode beacon in a trojanised Electron app",
+  "date": "2026-08-08",
+  "case_id": "3e635dd6-62fa-4f4f-869f-509a831800f1",
+  "family": "win.cobalt_strike",
+  "family_adopted": true,
+  "sha256": "39c69cb0f29f8e9f41fa305cb1adf34762e5d8131ae348553b089377236c4f38",
+  "mb_filename": "wczt-win-8.1.65-x64 (1).exe",
+  "alerts": [
+    {
+      "rule": "Potential Timestomp in Executable Files",
+      "count": 34
+    },
+    {
+      "rule": "Network Activity to a Suspicious Top Level Domain",
+      "count": 30
+    },
+    {
+      "rule": "Memory Threat Detection Alert: Shellcode Injection",
+      "count": 4
+    },
+    {
+      "rule": "Malware Detection Alert",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Network Connect API from Unbacked Memory",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Potential Image Load with a Spoofed Creation Time",
+      "count": 4
+    },
+    {
+      "rule": "Process Execution from an Unusual Directory",
+      "count": 4
+    },
+    {
+      "rule": "Unsigned DLL Side-Loading from a Suspicious Folder",
+      "count": 3
+    },
+    {
+      "rule": "Elastic Defend Alert Followed by Telemetry Loss",
+      "count": 2
+    },
+    {
+      "rule": "File Compressed or Archived into Common Format by Unsigned Process",
+      "count": 2
+    },
+    {
+      "rule": "Memory Threat Detection Alert: Windows.Trojan.Generic",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Execution from Suspicious Directory",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious NTDLL Image Load",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Potential NTDLL Memory Unhooking",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Shellcode Execution from Low Reputation Module",
+      "count": 2
+    }
+  ],
+  "total_alerts": 101,
+  "severity": {
+    "high": 32,
+    "low": 2,
+    "critical": 26,
+    "medium": 41
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 78
+    },
+    {
+      "name": "Command and Control",
+      "count": 32
+    },
+    {
+      "name": "Execution",
+      "count": 4
+    },
+    {
+      "name": "Collection",
+      "count": 2
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1027",
+      "name": "Obfuscated Files or Information"
+    },
+    {
+      "id": "T1027.015",
+      "name": "Compression"
+    },
+    {
+      "id": "T1036",
+      "name": "Masquerading"
+    },
+    {
+      "id": "T1036.001",
+      "name": "Invalid Code Signature"
+    },
+    {
+      "id": "T1036.005",
+      "name": "Match Legitimate Resource Name or Location"
+    },
+    {
+      "id": "T1055",
+      "name": "Process Injection"
+    },
+    {
+      "id": "T1070",
+      "name": "Indicator Removal"
+    },
+    {
+      "id": "T1070.006",
+      "name": "Timestomp"
+    },
+    {
+      "id": "T1071",
+      "name": "Application Layer Protocol"
+    },
+    {
+      "id": "T1071.004",
+      "name": "DNS"
+    },
+    {
+      "id": "T1074",
+      "name": "Data Staged"
+    },
+    {
+      "id": "T1074.001",
+      "name": "Local Data Staging"
+    },
+    {
+      "id": "T1127",
+      "name": "Trusted Developer Utilities Proxy Execution"
+    },
+    {
+      "id": "T1127.001",
+      "name": "MSBuild"
+    },
+    {
+      "id": "T1132",
+      "name": "Data Encoding"
+    },
+    {
+      "id": "T1132.001",
+      "name": "Standard Encoding"
+    },
+    {
+      "id": "T1204",
+      "name": "User Execution"
+    },
+    {
+      "id": "T1204.002",
+      "name": "Malicious File"
+    },
+    {
+      "id": "T1218",
+      "name": "System Binary Proxy Execution"
+    },
+    {
+      "id": "T1560",
+      "name": "Archive Collected Data"
+    },
+    {
+      "id": "T1560.001",
+      "name": "Archive via Utility"
+    },
+    {
+      "id": "T1562",
+      "name": "Impair Defenses"
+    },
+    {
+      "id": "T1562.001",
+      "name": "Disable or Modify Tools"
+    },
+    {
+      "id": "T1574",
+      "name": "Hijack Execution Flow"
+    },
+    {
+      "id": "T1574.001",
+      "name": "DLL"
+    },
+    {
+      "id": "T1620",
+      "name": "Reflective Code Loading"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "39c69cb0f29f8e9f41fa305cb1adf34762e5d8131ae348553b089377236c4f38",
+      "note": "sample"
+    },
+    {
+      "type": "SHA256",
+      "value": "0f41af982ffa0570df698cf1f4227f8e5c5ee47820dc48bd647e077d611e8954",
+      "note": "component"
+    },
+    {
+      "type": "Domain",
+      "value": "dm.telegrem.store"
+    },
+    {
+      "type": "IP",
+      "value": "118.107.43.16"
+    },
+    {
+      "type": "IP",
+      "value": "118.107.43.138"
+    },
+    {
+      "type": "Payload host",
+      "value": "xjsjkjdsjjd.s3.ap-southeast-1.amazonaws.com"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-08T18:07:44.048Z",
+  "last": "2026-08-08T18:17:17.636Z",
+  "canvas": null,
+  "no_network": false
+}

@@ -1,0 +1,146 @@
+{
+  "slug": "dotnet-rat-keylogger",
+  "folder": "2026-08-08-dotnet-rat-keylogger",
+  "title": ".NET RAT with keylogging and Run-key persistence",
+  "date": "2026-08-08",
+  "case_id": "2747eaba-7963-4ca5-87dd-71c01a9f3c54",
+  "family": null,
+  "family_adopted": false,
+  "sha256": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674",
+  "mb_filename": "ntmyebewekca.exe",
+  "alerts": [
+    {
+      "rule": "Malware Detection Alert",
+      "count": 8
+    },
+    {
+      "rule": "Component Object Model Hijacking",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Startup Persistence by a Low Reputation Process",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Startup Persistence from a Browser or Compression Utility Descendant",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Keystrokes Input Capture from a Managed Application",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Malicious Reputation of Executable Download",
+      "count": 2
+    },
+    {
+      "rule": "Startup or Run Key Registry Modification",
+      "count": 2
+    },
+    {
+      "rule": "Parent Process Detected with Suspicious Windows Process(es)",
+      "count": 1
+    },
+    {
+      "rule": "Potential Masquerading as System32 Executable",
+      "count": 1
+    },
+    {
+      "rule": "User Detected with Suspicious Windows Process(es)",
+      "count": 1
+    }
+  ],
+  "total_alerts": 29,
+  "severity": {
+    "low": 9,
+    "critical": 20
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 9
+    },
+    {
+      "name": "Persistence",
+      "count": 7
+    },
+    {
+      "name": "Privilege Escalation",
+      "count": 4
+    },
+    {
+      "name": "Execution",
+      "count": 4
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1036",
+      "name": "Masquerading"
+    },
+    {
+      "id": "T1036.001",
+      "name": "Invalid Code Signature"
+    },
+    {
+      "id": "T1036.005",
+      "name": "Match Legitimate Resource Name or Location"
+    },
+    {
+      "id": "T1112",
+      "name": "Modify Registry"
+    },
+    {
+      "id": "T1204",
+      "name": "User Execution"
+    },
+    {
+      "id": "T1204.002",
+      "name": "Malicious File"
+    },
+    {
+      "id": "T1218",
+      "name": "System Binary Proxy Execution"
+    },
+    {
+      "id": "T1546",
+      "name": "Event Triggered Execution"
+    },
+    {
+      "id": "T1546.015",
+      "name": "Component Object Model Hijacking"
+    },
+    {
+      "id": "T1547",
+      "name": "Boot or Logon Autostart Execution"
+    },
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder"
+    },
+    {
+      "id": "T1553",
+      "name": "Subvert Trust Controls"
+    },
+    {
+      "id": "T1553.002",
+      "name": "Code Signing"
+    },
+    {
+      "id": "T1554",
+      "name": "Compromise Host Software Binary"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674",
+      "note": "sample"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-08T17:47:28.428Z",
+  "last": "2026-08-08T18:00:44.740Z",
+  "canvas": null,
+  "no_network": true
+}

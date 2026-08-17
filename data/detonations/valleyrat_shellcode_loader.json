@@ -1,0 +1,406 @@
+{
+  "slug": "valleyrat-shellcode-loader",
+  "folder": "2026-08-08-valleyrat-shellcode-loader",
+  "title": "ValleyRAT \u2014 shellcode loader with EDR evasion and Defender tampering",
+  "date": "2026-08-08",
+  "case_id": "74b26185-dcfc-4188-9cbc-e2065b0d75fc",
+  "family": "win.valley_rat",
+  "family_adopted": true,
+  "sha256": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c",
+  "mb_filename": "install_b0n010.exe",
+  "alerts": [
+    {
+      "rule": "Threat Intel IP Address Indicator Match",
+      "count": 62
+    },
+    {
+      "rule": "Local Scheduled Task Creation",
+      "count": 60
+    },
+    {
+      "rule": "Threat Intel Hash Indicator Match",
+      "count": 29
+    },
+    {
+      "rule": "Memory Threat Detection Alert: Shellcode Injection",
+      "count": 20
+    },
+    {
+      "rule": "Malware Detection Alert",
+      "count": 20
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious Scheduled Task Creation",
+      "count": 14
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Direct Syscall from Unsigned Module",
+      "count": 12
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Shellcode Execution from Low Reputation Module",
+      "count": 12
+    },
+    {
+      "rule": "File and Directory Permissions Modification",
+      "count": 10
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Shellcode Injection with Parent as Provenance",
+      "count": 10
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Unbacked Shellcode from Unsigned Module",
+      "count": 10
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Potential Process Creation via ShellCode",
+      "count": 6
+    },
+    {
+      "rule": "Unsigned DLL Loaded by a Trusted Process",
+      "count": 6
+    },
+    {
+      "rule": "Elastic Defend Alert Followed by Telemetry Loss",
+      "count": 4
+    },
+    {
+      "rule": "Windows Defender Exclusions Added via PowerShell",
+      "count": 4
+    },
+    {
+      "rule": "Disabling Windows Defender Security Settings via PowerShell",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Windows Defender Exclusions via WMI",
+      "count": 4
+    },
+    {
+      "rule": "Svchost spawning Cmd",
+      "count": 3
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Network Module Loaded from Suspicious Unbacked Memory",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Scheduled Task by a Low Reputation Process",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Scheduled Task from a Browser or Compression Utility Descendant",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Scheduled Task Creation by an Unusual Process",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious Windows Schedule Child Process",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Untrusted DLL Loaded by a Persistent Program",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Unsigned DLL from Suspicious Directory",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Native API Call from Unsigned Module",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: VirtualAlloc API Call from an Unsigned DLL",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious String Value Written to Registry Run Key",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious Windows Defender Exclusions Added via PowerShell",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious NTDLL Image Load",
+      "count": 2
+    },
+    {
+      "rule": "Process Execution from an Unusual Directory",
+      "count": 2
+    },
+    {
+      "rule": "File or Directory Deletion Command",
+      "count": 1
+    },
+    {
+      "rule": "Disabling User Account Control via Registry Modification",
+      "count": 1
+    },
+    {
+      "rule": "Service Control Spawned via Script Interpreter",
+      "count": 1
+    },
+    {
+      "rule": "Unsigned DLL Side-Loading from a Suspicious Folder",
+      "count": 1
+    },
+    {
+      "rule": "Service Disabled via Registry Modification",
+      "count": 1
+    },
+    {
+      "rule": "Startup or Run Key Registry Modification",
+      "count": 1
+    },
+    {
+      "rule": "WDAC Policy File by an Unusual Process",
+      "count": 1
+    },
+    {
+      "rule": "Executable File with Unusual Extension",
+      "count": 1
+    }
+  ],
+  "total_alerts": 324,
+  "severity": {
+    "high": 96,
+    "medium": 12,
+    "low": 84,
+    "critical": 132
+  },
+  "tactics": [
+    {
+      "name": "Persistence",
+      "count": 61
+    },
+    {
+      "name": "Defense Evasion",
+      "count": 48
+    },
+    {
+      "name": "Execution",
+      "count": 26
+    },
+    {
+      "name": "Privilege Escalation",
+      "count": 2
+    },
+    {
+      "name": "Impact",
+      "count": 1
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1036",
+      "name": "Masquerading"
+    },
+    {
+      "id": "T1036.001",
+      "name": "Invalid Code Signature"
+    },
+    {
+      "id": "T1036.005",
+      "name": "Match Legitimate Resource Name or Location"
+    },
+    {
+      "id": "T1036.008",
+      "name": "Masquerade File Type"
+    },
+    {
+      "id": "T1047",
+      "name": "Windows Management Instrumentation"
+    },
+    {
+      "id": "T1053",
+      "name": "Scheduled Task/Job"
+    },
+    {
+      "id": "T1053.005",
+      "name": "Scheduled Task"
+    },
+    {
+      "id": "T1055",
+      "name": "Process Injection"
+    },
+    {
+      "id": "T1059",
+      "name": "Command and Scripting Interpreter"
+    },
+    {
+      "id": "T1059.001",
+      "name": "PowerShell"
+    },
+    {
+      "id": "T1059.003",
+      "name": "Windows Command Shell"
+    },
+    {
+      "id": "T1059.005",
+      "name": "Visual Basic"
+    },
+    {
+      "id": "T1070",
+      "name": "Indicator Removal"
+    },
+    {
+      "id": "T1070.004",
+      "name": "File Deletion"
+    },
+    {
+      "id": "T1112",
+      "name": "Modify Registry"
+    },
+    {
+      "id": "T1204",
+      "name": "User Execution"
+    },
+    {
+      "id": "T1204.002",
+      "name": "Malicious File"
+    },
+    {
+      "id": "T1218",
+      "name": "System Binary Proxy Execution"
+    },
+    {
+      "id": "T1218.005",
+      "name": "Mshta"
+    },
+    {
+      "id": "T1218.010",
+      "name": "Regsvr32"
+    },
+    {
+      "id": "T1218.011",
+      "name": "Rundll32"
+    },
+    {
+      "id": "T1222",
+      "name": "File and Directory Permissions Modification"
+    },
+    {
+      "id": "T1222.001",
+      "name": "Windows File and Directory Permissions Modification"
+    },
+    {
+      "id": "T1489",
+      "name": "Service Stop"
+    },
+    {
+      "id": "T1543",
+      "name": "Create or Modify System Process"
+    },
+    {
+      "id": "T1543.003",
+      "name": "Windows Service"
+    },
+    {
+      "id": "T1547",
+      "name": "Boot or Logon Autostart Execution"
+    },
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder"
+    },
+    {
+      "id": "T1548",
+      "name": "Abuse Elevation Control Mechanism"
+    },
+    {
+      "id": "T1548.002",
+      "name": "Bypass User Account Control"
+    },
+    {
+      "id": "T1562",
+      "name": "Impair Defenses"
+    },
+    {
+      "id": "T1562.001",
+      "name": "Disable or Modify Tools"
+    },
+    {
+      "id": "T1562.006",
+      "name": "Indicator Blocking"
+    },
+    {
+      "id": "T1569",
+      "name": "System Services"
+    },
+    {
+      "id": "T1569.002",
+      "name": "Service Execution"
+    },
+    {
+      "id": "T1574",
+      "name": "Hijack Execution Flow"
+    },
+    {
+      "id": "T1574.001",
+      "name": "DLL"
+    },
+    {
+      "id": "T1620",
+      "name": "Reflective Code Loading"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c",
+      "note": "sample"
+    },
+    {
+      "type": "SHA256",
+      "value": "2363383be9c4b6f815cb0192ccd5efab0658d508402de1bf00c4d9617416688c",
+      "note": "component"
+    },
+    {
+      "type": "SHA256",
+      "value": "41f186e02c63bedd94c6451ab99259f28ec627528e9ad7072b4b436039d57e16",
+      "note": "component"
+    },
+    {
+      "type": "SHA256",
+      "value": "501a00cb66e3e45a4de890e81d3540e368e8616d3d478b58e61b9223d3869349",
+      "note": "component"
+    },
+    {
+      "type": "SHA256",
+      "value": "676a2a7b94ca2f8ec76352ee656e4d075bb342bd7ad6efbc7c19c060001eace7",
+      "note": "component"
+    },
+    {
+      "type": "SHA256",
+      "value": "e5e88e145be3add238e49244361c50c501213264307bbb7143f7dd0cef720119",
+      "note": "component"
+    },
+    {
+      "type": "SHA256",
+      "value": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8",
+      "note": "component"
+    },
+    {
+      "type": "IP",
+      "value": "134.209.42.122"
+    },
+    {
+      "type": "IP",
+      "value": "39.103.20.88:443"
+    },
+    {
+      "type": "IP",
+      "value": "47.79.64.254:443"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-08T17:28:17.906Z",
+  "last": "2026-08-08T17:36:33.283Z",
+  "canvas": "2026-08-08-valleyrat-shellcode-loader",
+  "no_network": false
+}

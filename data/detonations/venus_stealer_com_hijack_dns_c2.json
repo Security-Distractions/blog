@@ -1,0 +1,119 @@
+{
+  "slug": "venus-stealer-com-hijack-dns-c2",
+  "folder": "2026-08-08-venus-stealer-com-hijack-dns-c2",
+  "title": "Venus Stealer \u2014 COM hijack persistence and DNS C2",
+  "date": "2026-08-08",
+  "case_id": "76160582-5f31-4eb6-b026-c9a6b60ba9ca",
+  "family": "py.venus_stealer",
+  "family_adopted": true,
+  "sha256": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8",
+  "mb_filename": "097b3b7c38e22a3b1e5e434c907f5261.exe",
+  "alerts": [
+    {
+      "rule": "Network Activity to a Suspicious Top Level Domain",
+      "count": 15
+    },
+    {
+      "rule": "Malware Detection Alert",
+      "count": 6
+    },
+    {
+      "rule": "Component Object Model Hijacking",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Malicious Reputation of Executable Download",
+      "count": 4
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: DNS Query to Suspicious Top Level Domain",
+      "count": 2
+    }
+  ],
+  "total_alerts": 31,
+  "severity": {
+    "low": 4,
+    "critical": 12,
+    "high": 15
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 19
+    },
+    {
+      "name": "Command and Control",
+      "count": 15
+    },
+    {
+      "name": "Persistence",
+      "count": 4
+    },
+    {
+      "name": "Privilege Escalation",
+      "count": 4
+    },
+    {
+      "name": "Execution",
+      "count": 3
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1071",
+      "name": "Application Layer Protocol"
+    },
+    {
+      "id": "T1071.004",
+      "name": "DNS"
+    },
+    {
+      "id": "T1112",
+      "name": "Modify Registry"
+    },
+    {
+      "id": "T1127",
+      "name": "Trusted Developer Utilities Proxy Execution"
+    },
+    {
+      "id": "T1127.001",
+      "name": "MSBuild"
+    },
+    {
+      "id": "T1204",
+      "name": "User Execution"
+    },
+    {
+      "id": "T1204.002",
+      "name": "Malicious File"
+    },
+    {
+      "id": "T1218",
+      "name": "System Binary Proxy Execution"
+    },
+    {
+      "id": "T1546",
+      "name": "Event Triggered Execution"
+    },
+    {
+      "id": "T1546.015",
+      "name": "Component Object Model Hijacking"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8",
+      "note": "sample"
+    },
+    {
+      "type": "Domain",
+      "value": "strmer.top"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-08T17:00:00.746Z",
+  "last": "2026-08-08T17:02:15.671Z",
+  "canvas": null,
+  "no_network": false
+}

@@ -670,3 +670,90 @@ a.link-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
 .post-content a.link-card,
 .post-content a.link-card:hover,
 .post-content a.link-card * { text-decoration: none !important; box-shadow: none; }
+
+/* ============================================================================
+   Detonation post components: alerts table, on-host attack path, CTI panel.
+   Driven from data/ files generated out of Elastic, so this is the only place
+   their presentation is defined.
+   ========================================================================== */
+.alert-table, .attack-path, .cti-panel {
+  margin: 32px 0; background: var(--panel); border: 1px solid var(--line);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.alert-table-head, .attack-path-head, .cti-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 14px 20px; background: var(--panel-hi); border-bottom: 1px solid var(--line);
+}
+.alert-table-title, .attack-path-title, .cti-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--neon-cyan);
+}
+.alert-table-meta, .attack-path-meta {
+  margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px; color: var(--secondary);
+}
+.alert-rows { list-style: none; margin: 0; padding: 8px 0; }
+.alert-row { display: grid; grid-template-columns: minmax(0,1fr) 90px 44px; align-items: center; gap: 12px; padding: 7px 20px; }
+.alert-row + .alert-row { border-top: 1px dashed rgba(22,35,63,.7); }
+.alert-rule { font-size: 14px; color: var(--content); overflow-wrap: anywhere; }
+.alert-bar { display: block; height: 6px; background: rgba(34,211,238,.10); border-radius: 3px; }
+.alert-bar-fill { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta)); }
+.alert-count { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: var(--neon-cyan-hi); }
+.alert-table-foot, .attack-path-foot, .cti-foot { margin: 0; padding: 12px 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--secondary); }
+.alert-table-empty { margin: 0; padding: 18px 20px; font-size: 14px; color: var(--secondary); }
+.sev-chip { display: inline-block; margin-right: 6px; padding: 1px 7px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; border: 1px solid var(--line); background: var(--panel-hi); }
+.sev-critical { color: var(--neon-magenta); border-color: rgba(255,45,149,.45); }
+.sev-high { color: var(--neon-amber); border-color: rgba(255,176,32,.45); }
+.sev-medium { color: var(--neon-cyan); border-color: rgba(34,211,238,.45); }
+.sev-low { color: var(--secondary); }
+.attack-path-host { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--neon-emerald); }
+.attack-path-ip { color: var(--secondary); }
+.attack-steps { list-style: none; margin: 0; padding: 10px 0 4px; }
+.attack-step { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 14px; padding: 12px 20px; }
+.attack-step + .attack-step { border-top: 1px dashed rgba(22,35,63,.7); }
+.attack-step-num {
+  display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; margin-top: 2px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+  color: var(--black); background: var(--neon-cyan);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+.attack-step-body { min-width: 0; }
+.attack-step-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
+.attack-step-tactic { padding: 1px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); color: var(--secondary); background: var(--panel-hi); }
+.tactic-execution { color: var(--neon-amber); border-color: rgba(255,176,32,.45); }
+.tactic-defense-evasion { color: var(--neon-magenta); border-color: rgba(255,45,149,.45); }
+.tactic-persistence { color: var(--neon-violet); border-color: rgba(185,139,255,.45); }
+.tactic-command-and-control { color: var(--neon-cyan); border-color: rgba(34,211,238,.45); }
+.tactic-discovery { color: var(--neon-emerald); border-color: rgba(57,255,158,.45); }
+.attack-step-mitre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--neon-cyan) !important; text-decoration: none !important; border-bottom: 1px dotted rgba(34,211,238,.5); }
+.attack-step-time { margin-left: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--secondary); }
+.attack-step-what { margin: 0; font-size: 15px; color: var(--primary); line-height: 1.5; }
+.attack-step-sub { margin: 2px 0 0; font-size: 13.5px; color: var(--secondary); line-height: 1.5; }
+.attack-step-details { margin: 8px 0 0 !important; padding: 8px 10px !important; background: var(--black) !important; border: 1px solid var(--line); font-size: 12px !important; line-height: 1.5; overflow-x: auto; }
+.attack-step-details code { background: none !important; padding: 0 !important; color: var(--content); }
+.cti-verdict { margin-left: auto; padding: 1px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); }
+.cti-adopted { color: var(--neon-emerald); border-color: rgba(57,255,158,.5); }
+.cti-rejected { color: var(--neon-magenta); border-color: rgba(255,45,149,.5); }
+.cti-none { color: var(--secondary); }
+.cti-grid { display: grid; grid-template-columns: 150px minmax(0,1fr); margin: 0; padding: 14px 20px 4px; }
+.cti-grid dt { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--secondary); padding: 5px 0; }
+.cti-grid dd { margin: 0; padding: 5px 0; font-size: 14px; color: var(--content); overflow-wrap: anywhere; }
+.cti-hash { font-size: 12px !important; }
+.cti-dim { color: var(--secondary); }
+.cti-iocs, .cti-tactics { padding: 6px 20px 14px; }
+.cti-iocs-title { display: block; margin-bottom: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--secondary); }
+.cti-iocs ul { list-style: none; margin: 0; padding: 0; }
+.cti-iocs li { padding: 3px 0; font-size: 13px; overflow-wrap: anywhere; }
+.ioc-type { display: inline-block; min-width: 78px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; text-transform: uppercase; color: var(--neon-amber); }
+.ioc-note { font-size: 11px; color: var(--secondary); }
+.cti-nonet { margin: 0; padding: 0 20px 14px; font-size: 13px; color: var(--secondary); }
+.cti-tactic-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tactic-chip { padding: 2px 8px; font-size: 12px; color: var(--content); border: 1px solid var(--line); background: var(--panel-hi); }
+.tactic-chip em { color: var(--neon-cyan); font-style: normal; }
+@media (max-width: 620px) {
+  .alert-row { grid-template-columns: minmax(0,1fr) 40px; }
+  .alert-bar { display: none; }
+  .cti-grid { grid-template-columns: 1fr; }
+  .cti-grid dd { padding-bottom: 10px; }
+  .attack-step { grid-template-columns: 26px minmax(0,1fr); gap: 10px; padding: 12px 14px; }
+}

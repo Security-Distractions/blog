@@ -1,0 +1,57 @@
+{{- /*
+  The detections that fired for one detonation, as a ranked table with volume bars.
+
+    {{< alerts key="valleyrat_shellcode_loader" >}}
+
+  Reads site.Data.detonations.<key>, which is generated from the Elastic case and its
+  alerts — so the numbers here are the real alert counts, not hand-copied ones.
+
+  Params:
+    key   (required) data file name under data/detonations/, underscores not hyphens
+    max   cap the rows shown; the remainder is summarised in the footer (default all)
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $d := index site.Data.detonations $key -}}
+{{- if not $d -}}
+  {{- errorf "alerts: no data file for key %q (looked in data/detonations/%s.json)" $key $key -}}
+{{- end -}}
+{{- $max := int (.Get "max" | default (len $d.alerts)) -}}
+{{- $shown := first $max $d.alerts -}}
+{{- $top := 1 -}}
+{{- with index $d.alerts 0 }}{{ $top = .count }}{{ end -}}
+<div class="alert-table">
+  <div class="alert-table-head">
+    <span class="alert-table-title">Detections that fired</span>
+    <span class="alert-table-meta">{{ $d.total_alerts }} alert{{ if ne $d.total_alerts 1 }}s{{ end }} · {{ len $d.alerts }} rule{{ if ne (len $d.alerts) 1 }}s{{ end }}</span>
+  </div>
+  {{- if eq (len $d.alerts) 0 }}
+  <p class="alert-table-empty">No alerts are recorded for this sample — see the analysis above for
+     what that means.</p>
+  {{- else }}
+  <ol class="alert-rows">
+    {{- range $shown }}
+    <li class="alert-row">
+      <span class="alert-rule">{{ .rule }}</span>
+      <span class="alert-bar" aria-hidden="true">
+        <span class="alert-bar-fill" style="width:{{ math.Round (mul (div (float .count) (float $top)) 100) }}%"></span>
+      </span>
+      <span class="alert-count">{{ .count }}</span>
+    </li>
+    {{- end }}
+  </ol>
+  {{- $rest := sub (len $d.alerts) (len $shown) }}
+  {{- if gt $rest 0 }}
+  <p class="alert-table-foot">+ {{ $rest }} further rule{{ if ne $rest 1 }}s{{ end }} fired at lower volume.</p>
+  {{- end }}
+  {{- if eq $d.alerts_source "host+window" }}
+  <p class="alert-table-foot">These alerts were not linked to the Elastic case, so they are counted by
+    querying the alert index for this host across the detonation window — which is also why the total
+    is higher than the figure quoted in the original investigation notes.</p>
+  {{- end }}
+  {{- with $d.severity }}
+  <p class="alert-table-foot">Severity spread:
+    {{- range $k, $v := . }} <span class="sev-chip sev-{{ $k }}">{{ $k }} {{ $v }}</span>{{ end -}}
+  </p>
+  {{- end }}
+  {{- end }}
+</div>

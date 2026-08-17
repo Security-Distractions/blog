@@ -1,0 +1,109 @@
+{
+  "slug": "rmm-abuse-loader-screenconnect",
+  "folder": "2026-08-08-rmm-abuse-loader-screenconnect",
+  "title": "RMM abuse loader \u2014 ScreenConnect deployed via PyInstaller",
+  "date": "2026-08-08",
+  "case_id": "26ce6f7b-8cae-4ff9-910f-9fea0e5ade4e",
+  "family": "elf.kuiper",
+  "family_adopted": false,
+  "sha256": "12833af0f0d1c3c193cf0aeadb7c2dbb3b6b9f4a600e65b43e3997fcd6621e88",
+  "mb_filename": "composer.dat",
+  "alerts": [
+    {
+      "rule": "Malicious Behavior Detection Alert: Windows Defender Exclusions via WMI",
+      "count": 24
+    },
+    {
+      "rule": "Windows Defender Exclusions Added via PowerShell",
+      "count": 24
+    },
+    {
+      "rule": "Threat Intel Hash Indicator Match",
+      "count": 22
+    },
+    {
+      "rule": "Malware Detection Alert",
+      "count": 18
+    },
+    {
+      "rule": "Component Object Model Hijacking",
+      "count": 4
+    },
+    {
+      "rule": "File Compressed or Archived into Common Format by Unsigned Process",
+      "count": 3
+    },
+    {
+      "rule": "Disabling User Account Control via Registry Modification",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious Windows Defender Exclusions Added via PowerShell",
+      "count": 2
+    },
+    {
+      "rule": "Malicious Behavior Detection Alert: Suspicious Windows Schedule Child Process",
+      "count": 2
+    },
+    {
+      "rule": "PowerShell Script Block Logging Disabled",
+      "count": 1
+    }
+  ],
+  "total_alerts": 102,
+  "severity": {
+    "critical": 46,
+    "medium": 27,
+    "high": 22,
+    "low": 7
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 34
+    },
+    {
+      "name": "Execution",
+      "count": 33
+    },
+    {
+      "name": "Privilege Escalation",
+      "count": 6
+    },
+    {
+      "name": "Persistence",
+      "count": 4
+    },
+    {
+      "name": "Collection",
+      "count": 3
+    },
+    {
+      "name": "Command and Control",
+      "count": 3
+    }
+  ],
+  "techniques": [],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "12833af0f0d1c3c193cf0aeadb7c2dbb3b6b9f4a600e65b43e3997fcd6621e88",
+      "note": "sample"
+    },
+    {
+      "type": "SHA256",
+      "value": "4f8f750ffdd2a5df67946fdd29d4bb7a2d9b88d8495f9980d99f03e053f3b0a0",
+      "note": "component"
+    },
+    {
+      "type": "IP",
+      "value": "198.23.185.237:8041"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-08T15:59:08.427Z",
+  "last": "2026-08-08T16:31:39.925Z",
+  "canvas": null,
+  "alerts_source": "host+window",
+  "no_network": false
+}

@@ -1,0 +1,72 @@
+{{- /*
+  The threat-intel panel for a detonation: family attribution and the indicators, with an
+  explicit statement of whether the attribution was adopted or merely recorded.
+
+    {{< cti key="valleyrat_shellcode_loader" >}}
+
+  Reads site.Data.detonations.<key>. Attribution comes from the abuse.ch ThreatFox and
+  MalwareBazaar feeds matched by exact SHA256, so the panel says so rather than implying
+  the label is authoritative — community labels are evidence, not ground truth.
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $d := index site.Data.detonations $key -}}
+{{- if not $d -}}{{- errorf "cti: no data file for key %q" $key -}}{{- end -}}
+<div class="cti-panel">
+  <div class="cti-head">
+    <span class="cti-title">Threat intelligence</span>
+    {{- if $d.family }}
+      {{- if $d.family_adopted }}
+      <span class="cti-verdict cti-adopted">attribution adopted</span>
+      {{- else }}
+      <span class="cti-verdict cti-rejected">attribution rejected</span>
+      {{- end }}
+    {{- else }}
+    <span class="cti-verdict cti-none">no family label</span>
+    {{- end }}
+  </div>
+  <dl class="cti-grid">
+    <dt>Family</dt>
+    <dd>{{ with $d.family }}<code>{{ . }}</code>{{ else }}<span class="cti-dim">none available</span>{{ end }}</dd>
+    {{- with $d.sha256 }}
+    <dt>SHA256</dt>
+    <dd><code class="cti-hash">{{ . }}</code></dd>
+    {{- end }}
+    {{- with $d.mb_filename }}
+    <dt>Original filename</dt>
+    <dd><code>{{ . }}</code></dd>
+    {{- end }}
+    {{- with $d.host }}
+    {{- /* stated in full: these posts were written up later, so the detonation date is not the post date */}}
+    <dt>Detonated</dt>
+    <dd>{{ with $d.first }}{{ substr . 0 10 }} at {{ substr . 11 5 }} UTC{{ end }} on <code>{{ . }}</code></dd>
+    {{- end }}
+  </dl>
+  {{- with $d.iocs }}
+  <div class="cti-iocs">
+    <span class="cti-iocs-title">Indicators</span>
+    <ul>
+      {{- range . }}
+      <li><span class="ioc-type">{{ .type }}</span> <code>{{ .value }}</code>
+        {{- with .note }} <span class="ioc-note">({{ . }})</span>{{ end }}</li>
+      {{- end }}
+    </ul>
+  </div>
+  {{- end }}
+  {{- if $d.no_network }}
+  {{- /* stated explicitly: benign OS/browser traffic is not an indicator, and listing it
+         is how someone ends up alerting on Windows telemetry */}}
+  <p class="cti-nonet">No network indicators. Nothing belonging to this sample reached the network,
+    so the only destinations in the window were ordinary operating-system and browser traffic — which
+    are not indicators and are deliberately not listed.</p>
+  {{- end }}
+  {{- with $d.tactics }}
+  <div class="cti-tactics">
+    <span class="cti-iocs-title">Tactics seen in alerts</span>
+    <span class="cti-tactic-chips">
+      {{- range . }}<span class="tactic-chip">{{ .name }} <em>{{ .count }}</em></span>{{ end -}}
+    </span>
+  </div>
+  {{- end }}
+  <p class="cti-foot">Family attribution from the abuse.ch ThreatFox and MalwareBazaar feeds,
+    matched by exact SHA256. Community-sourced labels, treated as evidence rather than ground truth.</p>
+</div>

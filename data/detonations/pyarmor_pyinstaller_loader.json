@@ -1,0 +1,200 @@
+{
+  "slug": "pyarmor-pyinstaller-loader",
+  "folder": "2026-08-17-pyarmor-pyinstaller-loader",
+  "title": "PyArmor-obfuscated PyInstaller loader \u2014 Defender exclusion abuse via WMIC (SECDIS, 2026-08-17)",
+  "date": "2026-08-17",
+  "case_id": "fead879c-64db-4b55-ae10-922c4e3a143c",
+  "family": null,
+  "family_adopted": false,
+  "sha256": "d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1",
+  "mb_filename": "composer.php",
+  "alerts": [
+    {
+      "rule": "Malicious Behavior Detection Alert: Windows Defender Exclusions via WMI",
+      "count": 20
+    },
+    {
+      "rule": "Machine Learning Detected a Suspicious Windows Event with a Low Malicious Probability Score",
+      "count": 13
+    },
+    {
+      "rule": "[Sigma] Suspicious Microsoft Defender Exclusion Added Via WMIC",
+      "count": 10
+    },
+    {
+      "rule": "[Sigma] Potential PyArmor Obfuscated PyInstaller Payload Extraction",
+      "count": 6
+    },
+    {
+      "rule": "Component Object Model Hijacking",
+      "count": 4
+    },
+    {
+      "rule": "File Compressed or Archived into Common Format by Unsigned Process",
+      "count": 3
+    },
+    {
+      "rule": "Machine Learning Detected a Suspicious Windows Event with a High Malicious Probability Score",
+      "count": 2
+    },
+    {
+      "rule": "Multiple Alerts in Different ATT&CK Tactics on a Single Host",
+      "count": 2
+    },
+    {
+      "rule": "Alerts in Different ATT&CK Tactics by Host",
+      "count": 1
+    },
+    {
+      "rule": "Multiple Alerts Involving a User",
+      "count": 1
+    },
+    {
+      "rule": "LLM-Based Attack Chain Triage by Host",
+      "count": 1
+    },
+    {
+      "rule": "Multiple Alerts in Same ATT&CK Tactic by Host",
+      "count": 1
+    },
+    {
+      "rule": "Multiple Elastic Defend Alerts by Agent",
+      "count": 1
+    },
+    {
+      "rule": "Multiple Rare Elastic Defend Behavior Rules by Host",
+      "count": 1
+    },
+    {
+      "rule": "My First Rule",
+      "count": 1
+    },
+    {
+      "rule": "Multiple Alerts on a Host Exhibiting CPU Spike",
+      "count": 1
+    },
+    {
+      "rule": "LLM-Based Compromised User Triage by User",
+      "count": 1
+    }
+  ],
+  "total_alerts": 69,
+  "severity": {
+    "low": 21,
+    "critical": 24,
+    "high": 18,
+    "medium": 6
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 38
+    },
+    {
+      "name": "Execution",
+      "count": 10
+    },
+    {
+      "name": "Persistence",
+      "count": 4
+    },
+    {
+      "name": "Privilege Escalation",
+      "count": 4
+    },
+    {
+      "name": "Collection",
+      "count": 3
+    },
+    {
+      "name": "Command and Control",
+      "count": 3
+    },
+    {
+      "name": "Impact",
+      "count": 1
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1027",
+      "name": "Obfuscated Files or Information"
+    },
+    {
+      "id": "T1027.002",
+      "name": "Software Packing"
+    },
+    {
+      "id": "T1027.015",
+      "name": "Compression"
+    },
+    {
+      "id": "T1036",
+      "name": "Masquerading"
+    },
+    {
+      "id": "T1036.004",
+      "name": "Masquerade Task or Service"
+    },
+    {
+      "id": "T1047",
+      "name": "Windows Management Instrumentation"
+    },
+    {
+      "id": "T1074",
+      "name": "Data Staged"
+    },
+    {
+      "id": "T1074.001",
+      "name": "Local Data Staging"
+    },
+    {
+      "id": "T1112",
+      "name": "Modify Registry"
+    },
+    {
+      "id": "T1132",
+      "name": "Data Encoding"
+    },
+    {
+      "id": "T1132.001",
+      "name": "Standard Encoding"
+    },
+    {
+      "id": "T1546",
+      "name": "Event Triggered Execution"
+    },
+    {
+      "id": "T1546.015",
+      "name": "Component Object Model Hijacking"
+    },
+    {
+      "id": "T1560",
+      "name": "Archive Collected Data"
+    },
+    {
+      "id": "T1560.001",
+      "name": "Archive via Utility"
+    },
+    {
+      "id": "T1564",
+      "name": "Hide Artifacts"
+    },
+    {
+      "id": "T1564.012",
+      "name": "File/Path Exclusions"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1",
+      "note": "sample"
+    }
+  ],
+  "host": "secdis",
+  "first": "2026-08-17T10:23:34.831Z",
+  "last": "2026-08-17T10:35:59.125Z",
+  "canvas": "2026-08-17-pyarmor-pyinstaller-loader",
+  "no_network": true
+}
