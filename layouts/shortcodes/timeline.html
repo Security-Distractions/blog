@@ -1,0 +1,42 @@
+{{- /*
+  Chronological timeline of the intrusion, in the style The DFIR Report presents one — but
+  as a table rather than an image, so it is searchable, selectable and readable on a phone.
+
+    {{< timeline key="valleyrat_shellcode_loader" >}}
+
+  Reads site.Data.detonations.<key>.timeline, which holds the first firing of each detection
+  rule in time order, taken from the alert documents themselves. Only first occurrences are
+  listed: a rule that fires 60 times contributes one row, at the moment it first saw the
+  behaviour.
+
+  Params:
+    key   (required) data file under data/detonations/
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $d := index site.Data.detonations $key -}}
+{{- if not $d -}}{{- errorf "timeline: no data for key %q" $key -}}{{- end -}}
+{{- with $d.timeline }}
+<div class="tl-wrap">
+  <div class="tl-head">
+    <span class="tl-title">Timeline</span>
+    <span class="tl-meta">{{ len . }} distinct detections · first firing of each ·
+      {{ (index . 0).time | time.Format "2 Jan 2006" }} UTC</span>
+  </div>
+  <ol class="tl-rows">
+    {{- range . }}
+    <li class="tl-row">
+      <span class="tl-time">{{ substr .time 11 8 }}</span>
+      <span class="tl-mark" aria-hidden="true"></span>
+      <span class="tl-event">{{ .event }}
+        {{- with .process }}{{/* samples named after their own hash blow the column out */}}
+        <span class="tl-proc" title="{{ . }}">{{ cond (gt (len .) 30) (printf "%s…" (substr . 0 26)) . }}</span>
+        {{- end }}</span>
+    </li>
+    {{- end }}
+  </ol>
+  <p class="tl-foot">Times are UTC, from the alert documents. Each row is the first time that
+    rule fired; repeat firings are counted under Detections.</p>
+</div>
+{{- else }}
+<p class="tl-empty">No detection timeline is available for this sample.</p>
+{{- end }}

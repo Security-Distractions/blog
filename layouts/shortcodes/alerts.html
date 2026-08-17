@@ -17,12 +17,13 @@
 {{- end -}}
 {{- $max := int (.Get "max" | default (len $d.alerts)) -}}
 {{- $shown := first $max $d.alerts -}}
+{{- $sigma := where $d.alerts "rule" "like" "[Sigma]*" -}}
 {{- $top := 1 -}}
 {{- with index $d.alerts 0 }}{{ $top = .count }}{{ end -}}
 <div class="alert-table">
   <div class="alert-table-head">
-    <span class="alert-table-title">Detections that fired</span>
-    <span class="alert-table-meta">{{ $d.total_alerts }} alert{{ if ne $d.total_alerts 1 }}s{{ end }} · {{ len $d.alerts }} rule{{ if ne (len $d.alerts) 1 }}s{{ end }}</span>
+    <span class="alert-table-title">Detections</span>
+    <span class="alert-table-meta">{{ $d.total_alerts }} alert{{ if ne $d.total_alerts 1 }}s{{ end }} · {{ len $d.alerts }} rule{{ if ne (len $d.alerts) 1 }}s{{ end }}{{ with $sigma }} · {{ len . }} Sigma-derived{{ end }}</span>
   </div>
   {{- if eq (len $d.alerts) 0 }}
   <p class="alert-table-empty">No alerts are recorded for this sample — see the analysis above for
@@ -30,8 +31,8 @@
   {{- else }}
   <ol class="alert-rows">
     {{- range $shown }}
-    <li class="alert-row">
-      <span class="alert-rule">{{ .rule }}</span>
+    <li class="alert-row{{ if hasPrefix .rule "[Sigma]" }} is-sigma{{ end }}">
+      <span class="alert-rule">{{ if hasPrefix .rule "[Sigma]" }}<span class="alert-src">Sigma</span>{{ end }}{{ replace .rule "[Sigma] " "" }}</span>
       <span class="alert-bar" aria-hidden="true">
         <span class="alert-bar-fill" style="width:{{ math.Round (mul (div (float .count) (float $top)) 100) }}%"></span>
       </span>

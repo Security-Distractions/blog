@@ -401,5 +401,202 @@
   "first": "2026-08-08T17:28:17.906Z",
   "last": "2026-08-08T17:36:33.283Z",
   "canvas": "2026-08-08-valleyrat-shellcode-loader",
-  "no_network": false
+  "no_network": false,
+  "timeline": [
+    {
+      "time": "2026-08-08T17:28:17.906Z",
+      "event": "Malware Detection Alert",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:29:19.926Z",
+      "event": "Malicious Behavior Detection Alert: Shellcode Injection with Parent as Provenance",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:29:19.931Z",
+      "event": "Malicious Behavior Detection Alert: Unbacked Shellcode from Unsigned Module",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:29:19.935Z",
+      "event": "Malicious Behavior Detection Alert: Network Module Loaded from Suspicious Unbacked Memory",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:29:19.947Z",
+      "event": "Malicious Behavior Detection Alert: Scheduled Task by a Low Reputation Process",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.122Z",
+      "event": "Malicious Behavior Detection Alert: Scheduled Task from a Browser or Compression Utility Descendant",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.126Z",
+      "event": "Malicious Behavior Detection Alert: Scheduled Task Creation by an Unusual Process",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.135Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious Windows Schedule Child Process",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.156Z",
+      "event": "Malicious Behavior Detection Alert: Untrusted DLL Loaded by a Persistent Program",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.160Z",
+      "event": "Malicious Behavior Detection Alert: Unsigned DLL from Suspicious Directory",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.163Z",
+      "event": "Malicious Behavior Detection Alert: Direct Syscall from Unsigned Module",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.181Z",
+      "event": "Malicious Behavior Detection Alert: Native API Call from Unsigned Module",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.192Z",
+      "event": "Malicious Behavior Detection Alert: VirtualAlloc API Call from an Unsigned DLL",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.203Z",
+      "event": "Malicious Behavior Detection Alert: Shellcode Execution from Low Reputation Module",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.238Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious String Value Written to Registry Run Key",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:20.257Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious Windows Defender Exclusions Added via PowerShell",
+      "process": "powershell.exe"
+    },
+    {
+      "time": "2026-08-08T17:30:42.567Z",
+      "event": "Disabling Windows Defender Security Settings via PowerShell",
+      "process": "powershell.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:23.484Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious NTDLL Image Load",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:23.488Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious Scheduled Task Creation",
+      "process": "schtasks.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:23.509Z",
+      "event": "Malicious Behavior Detection Alert: Windows Defender Exclusions via WMI",
+      "process": "powershell.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:23.704Z",
+      "event": "Memory Threat Detection Alert: Shellcode Injection",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:32.610Z",
+      "event": "Windows Defender Exclusions Added via PowerShell",
+      "process": "powershell.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:39.743Z",
+      "event": "Threat Intel Hash Indicator Match",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    },
+    {
+      "time": "2026-08-08T17:31:58.926Z",
+      "event": "Startup or Run Key Registry Modification",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:32:13.902Z",
+      "event": "File and Directory Permissions Modification",
+      "process": "icacls.exe"
+    },
+    {
+      "time": "2026-08-08T17:32:17.249Z",
+      "event": "Threat Intel IP Address Indicator Match",
+      "process": ""
+    },
+    {
+      "time": "2026-08-08T17:32:29.202Z",
+      "event": "Service Control Spawned via Script Interpreter",
+      "process": "sc.exe"
+    },
+    {
+      "time": "2026-08-08T17:33:07.709Z",
+      "event": "Unsigned DLL Loaded by a Trusted Process",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:33:23.931Z",
+      "event": "Malicious Behavior Detection Alert: Potential Process Creation via ShellCode",
+      "process": "cmd.exe"
+    },
+    {
+      "time": "2026-08-08T17:33:49.795Z",
+      "event": "Unsigned DLL Side-Loading from a Suspicious Folder",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:20.821Z",
+      "event": "Process Execution from an Unusual Directory",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:22.811Z",
+      "event": "Local Scheduled Task Creation",
+      "process": "cmd.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:30.436Z",
+      "event": "WDAC Policy File by an Unusual Process",
+      "process": "xhMLks.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:39.878Z",
+      "event": "Disabling User Account Control via Registry Modification",
+      "process": "yYRb4B.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:41.766Z",
+      "event": "File or Directory Deletion Command",
+      "process": "cmd.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:48.170Z",
+      "event": "Service Disabled via Registry Modification",
+      "process": "reg.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:48.195Z",
+      "event": "Elastic Defend Alert Followed by Telemetry Loss",
+      "process": "yYRb4B.exe"
+    },
+    {
+      "time": "2026-08-08T17:34:53.626Z",
+      "event": "Svchost spawning Cmd",
+      "process": "cmd.exe"
+    },
+    {
+      "time": "2026-08-08T17:35:44.945Z",
+      "event": "Executable File with Unusual Extension",
+      "process": "a43853c12573d2dd8792b2380c895118266c289f10e659c457354a009efdb47c.exe"
+    }
+  ]
 }

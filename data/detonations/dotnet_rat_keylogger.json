@@ -142,5 +142,57 @@
   "first": "2026-08-08T17:47:28.428Z",
   "last": "2026-08-08T18:00:44.740Z",
   "canvas": null,
-  "no_network": true
+  "no_network": true,
+  "timeline": [
+    {
+      "time": "2026-08-08T17:47:28.428Z",
+      "event": "Malicious Behavior Detection Alert: Malicious Reputation of Executable Download",
+      "process": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674.exe"
+    },
+    {
+      "time": "2026-08-08T17:47:28.616Z",
+      "event": "Malware Detection Alert",
+      "process": "7zG.exe"
+    },
+    {
+      "time": "2026-08-08T17:48:26.710Z",
+      "event": "Parent Process Detected with Suspicious Windows Process(es)",
+      "process": ""
+    },
+    {
+      "time": "2026-08-08T17:48:28.575Z",
+      "event": "Malicious Behavior Detection Alert: Startup Persistence by a Low Reputation Process",
+      "process": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674.exe"
+    },
+    {
+      "time": "2026-08-08T17:48:28.580Z",
+      "event": "Malicious Behavior Detection Alert: Startup Persistence from a Browser or Compression Utility Descendant",
+      "process": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674.exe"
+    },
+    {
+      "time": "2026-08-08T17:48:28.593Z",
+      "event": "Malicious Behavior Detection Alert: Keystrokes Input Capture from a Managed Application",
+      "process": "AggregatorHost.exe"
+    },
+    {
+      "time": "2026-08-08T17:49:09.701Z",
+      "event": "User Detected with Suspicious Windows Process(es)",
+      "process": ""
+    },
+    {
+      "time": "2026-08-08T17:50:53.566Z",
+      "event": "Potential Masquerading as System32 Executable",
+      "process": "AggregatorHost.exe"
+    },
+    {
+      "time": "2026-08-08T17:51:59.353Z",
+      "event": "Startup or Run Key Registry Modification",
+      "process": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674.exe"
+    },
+    {
+      "time": "2026-08-08T18:00:44.733Z",
+      "event": "Component Object Model Hijacking",
+      "process": "OneDrive.Sync.Service.exe"
+    }
+  ]
 }

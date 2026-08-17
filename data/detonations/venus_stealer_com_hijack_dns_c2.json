@@ -115,5 +115,32 @@
   "first": "2026-08-08T17:00:00.746Z",
   "last": "2026-08-08T17:02:15.671Z",
   "canvas": null,
-  "no_network": false
+  "no_network": false,
+  "timeline": [
+    {
+      "time": "2026-08-08T17:00:00.746Z",
+      "event": "Malware Detection Alert",
+      "process": "7zG.exe"
+    },
+    {
+      "time": "2026-08-08T17:00:06.887Z",
+      "event": "Malicious Behavior Detection Alert: Malicious Reputation of Executable Download",
+      "process": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8.exe"
+    },
+    {
+      "time": "2026-08-08T17:00:06.890Z",
+      "event": "Malicious Behavior Detection Alert: DNS Query to Suspicious Top Level Domain",
+      "process": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8.exe"
+    },
+    {
+      "time": "2026-08-08T17:00:30.374Z",
+      "event": "Component Object Model Hijacking",
+      "process": "OneDrive.Sync.Service.exe"
+    },
+    {
+      "time": "2026-08-08T17:02:15.647Z",
+      "event": "Network Activity to a Suspicious Top Level Domain",
+      "process": "f0a10f8d919b4e785e04461ed2adde2d51608e50f69e1e4995c85b71472272b8.exe"
+    }
+  ]
 }

@@ -1,0 +1,59 @@
+{{- /*
+  Indicators, split Atomic / Computed as The DFIR Report does:
+    Atomic   — things observed directly: addresses, domains, filenames
+    Computed — things derived from a file: hashes
+
+    {{< indicators key="valleyrat_shellcode_loader" >}}
+
+  Every indicator states what it is. Anything that could not be identified from the abuse.ch
+  feeds, the alert documents or the analysis is not listed at all, because an unlabelled hash
+  is not actionable and a benign endpoint published as an indicator is actively harmful.
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $d := index site.Data.detonations $key -}}
+{{- if not $d -}}{{- errorf "indicators: no data for key %q" $key -}}{{- end -}}
+{{- $atomic := slice -}}{{- $computed := slice -}}
+{{- range $d.iocs -}}
+  {{- if eq .type "SHA256" -}}{{- $computed = $computed | append . -}}
+  {{- else -}}{{- $atomic = $atomic | append . -}}{{- end -}}
+{{- end -}}
+<div class="ioc-wrap">
+  {{- with $atomic }}
+  <div class="ioc-block">
+    <span class="ioc-label">Atomic</span>
+    <table class="ioc-table">
+      <thead><tr><th>Type</th><th>Indicator</th></tr></thead>
+      <tbody>
+        {{- range . }}
+        <tr><td class="ioc-t">{{ .type }}</td><td><code>{{ .value }}</code>
+          {{- with .note }} <span class="ioc-note">— {{ . }}</span>{{ end }}</td></tr>
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+  {{- else }}
+  {{- if $d.no_network }}
+  <div class="ioc-block">
+    <span class="ioc-label">Atomic</span>
+    <p class="ioc-none">None. Nothing belonging to this sample reached the network, so every
+      destination in the window was ordinary operating-system or browser traffic. Those are not
+      indicators and are deliberately not listed.</p>
+  </div>
+  {{- end }}
+  {{- end }}
+  {{- with $computed }}
+  <div class="ioc-block">
+    <span class="ioc-label">Computed</span>
+    <table class="ioc-table">
+      <thead><tr><th>SHA256</th><th>File</th></tr></thead>
+      <tbody>
+        {{- range . }}
+        <tr><td><code class="ioc-hash">{{ .value }}</code></td>
+            <td>{{ with .note }}{{ . }}{{ else }}—{{ end }}
+              {{- with .path }}<br><span class="ioc-path">{{ . }}</span>{{ end }}</td></tr>
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+  {{- end }}
+</div>

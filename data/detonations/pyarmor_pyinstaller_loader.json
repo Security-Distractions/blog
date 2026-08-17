@@ -196,5 +196,92 @@
   "first": "2026-08-17T10:23:34.831Z",
   "last": "2026-08-17T10:35:59.125Z",
   "canvas": "2026-08-17-pyarmor-pyinstaller-loader",
-  "no_network": true
+  "no_network": true,
+  "timeline": [
+    {
+      "time": "2026-08-17T10:23:34.831Z",
+      "event": "Component Object Model Hijacking",
+      "process": "OneDrive.Sync.Service.exe"
+    },
+    {
+      "time": "2026-08-17T10:24:08.149Z",
+      "event": "File Compressed or Archived into Common Format by Unsigned Process",
+      "process": "d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1.exe"
+    },
+    {
+      "time": "2026-08-17T10:24:15.875Z",
+      "event": "Malicious Behavior Detection Alert: Windows Defender Exclusions via WMI",
+      "process": "WMIC.exe"
+    },
+    {
+      "time": "2026-08-17T10:24:27.177Z",
+      "event": "Machine Learning Detected a Suspicious Windows Event with a High Malicious Probability Score",
+      "process": "OneDriveSetup.exe"
+    },
+    {
+      "time": "2026-08-17T10:24:47.341Z",
+      "event": "Machine Learning Detected a Suspicious Windows Event with a Low Malicious Probability Score",
+      "process": "OneDriveSetup.exe"
+    },
+    {
+      "time": "2026-08-17T10:26:20.172Z",
+      "event": "[Sigma] Potential PyArmor Obfuscated PyInstaller Payload Extraction",
+      "process": "d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1.exe"
+    },
+    {
+      "time": "2026-08-17T10:26:23.160Z",
+      "event": "[Sigma] Suspicious Microsoft Defender Exclusion Added Via WMIC",
+      "process": "WMIC.exe"
+    },
+    {
+      "time": "2026-08-17T10:32:10.675Z",
+      "event": "Alerts in Different ATT&CK Tactics by Host",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:32:34.711Z",
+      "event": "Multiple Alerts Involving a User",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:32:58.795Z",
+      "event": "Multiple Alerts in Different ATT&CK Tactics on a Single Host",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:32:59.109Z",
+      "event": "LLM-Based Attack Chain Triage by Host",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:33:48.164Z",
+      "event": "Multiple Alerts in Same ATT&CK Tactic by Host",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:34:17.187Z",
+      "event": "Multiple Elastic Defend Alerts by Agent",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:34:24.179Z",
+      "event": "Multiple Rare Elastic Defend Behavior Rules by Host",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:35:52.780Z",
+      "event": "My First Rule",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:35:52.904Z",
+      "event": "Multiple Alerts on a Host Exhibiting CPU Spike",
+      "process": ""
+    },
+    {
+      "time": "2026-08-17T10:35:59.125Z",
+      "event": "LLM-Based Compromised User Triage by User",
+      "process": ""
+    }
+  ]
 }

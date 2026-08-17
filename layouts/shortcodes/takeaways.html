@@ -1,0 +1,18 @@
+{{- /*
+  Key Takeaways panel, in the style The DFIR Report opens its reports with: the findings
+  stated up front, before any narrative, so a reader gets the conclusions without reading
+  the whole analysis.
+
+    {{< takeaways >}}
+    - First finding.
+    - Second finding.
+    {{< /takeaways >}}
+
+  Inner content is markdown, so bullets, `code` and **emphasis** all work.
+*/ -}}
+<aside class="takeaways">
+  <span class="takeaways-title">Key Takeaways</span>
+  <div class="takeaways-body">
+    {{ .Inner | markdownify }}
+  </div>
+</aside>

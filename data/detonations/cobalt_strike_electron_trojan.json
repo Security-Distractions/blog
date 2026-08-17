@@ -234,5 +234,82 @@
   "first": "2026-08-08T18:07:44.048Z",
   "last": "2026-08-08T18:17:17.636Z",
   "canvas": null,
-  "no_network": false
+  "no_network": false,
+  "timeline": [
+    {
+      "time": "2026-08-08T18:07:44.048Z",
+      "event": "Malware Detection Alert",
+      "process": "39c69cb0f29f8e9f41fa305cb1adf34762e5d8131ae348553b089377236c4f38.exe"
+    },
+    {
+      "time": "2026-08-08T18:07:55.965Z",
+      "event": "Malicious Behavior Detection Alert: Potential Image Load with a Spoofed Creation Time",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:08:40.365Z",
+      "event": "Malicious Behavior Detection Alert: Potential NTDLL Memory Unhooking",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:08:40.371Z",
+      "event": "Malicious Behavior Detection Alert: Shellcode Execution from Low Reputation Module",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:08:50.503Z",
+      "event": "Unsigned DLL Side-Loading from a Suspicious Folder",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:08:55.879Z",
+      "event": "Malicious Behavior Detection Alert: Execution from Suspicious Directory",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:08:55.883Z",
+      "event": "Malicious Behavior Detection Alert: Suspicious NTDLL Image Load",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:09:21.256Z",
+      "event": "Process Execution from an Unusual Directory",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:09:44.805Z",
+      "event": "Malicious Behavior Detection Alert: Network Connect API from Unbacked Memory",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:09:53.647Z",
+      "event": "Elastic Defend Alert Followed by Telemetry Loss",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:09:53.697Z",
+      "event": "Memory Threat Detection Alert: Shellcode Injection",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:09:53.738Z",
+      "event": "Memory Threat Detection Alert: Windows.Trojan.Generic",
+      "process": "6F9619FF.exe"
+    },
+    {
+      "time": "2026-08-08T18:10:46.634Z",
+      "event": "File Compressed or Archived into Common Format by Unsigned Process",
+      "process": "wczt-win-8.1.65-x64).exe"
+    },
+    {
+      "time": "2026-08-08T18:10:58.686Z",
+      "event": "Potential Timestomp in Executable Files",
+      "process": "wczt-win-8.1.65-x64).exe"
+    },
+    {
+      "time": "2026-08-08T18:12:15.290Z",
+      "event": "Network Activity to a Suspicious Top Level Domain",
+      "process": "6F9619FF.exe"
+    }
+  ]
 }

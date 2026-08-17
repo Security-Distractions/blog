@@ -1,0 +1,36 @@
+{{- /*
+  MITRE ATT&CK section, in the style The DFIR Report closes with: tactics observed, then the
+  technique IDs with names, each linked to attack.mitre.org.
+
+    {{< mitre key="valleyrat_shellcode_loader" >}}
+
+  Reads site.Data.detonations.<key>. Tactics carry the alert count that evidenced them, so a
+  tactic claimed here is a tactic something actually fired on — not an aspiration.
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $d := index site.Data.detonations $key -}}
+{{- if not $d -}}{{- errorf "mitre: no data for key %q" $key -}}{{- end -}}
+<div class="mitre-wrap">
+  {{- with $d.tactics }}
+  <div class="mitre-block">
+    <span class="mitre-label">Tactics observed</span>
+    <div class="mitre-tactics">
+      {{- range . }}<span class="mitre-tactic">{{ .name }}<em>{{ .count }}</em></span>{{ end -}}
+    </div>
+  </div>
+  {{- end }}
+  {{- with $d.techniques }}
+  <div class="mitre-block">
+    <span class="mitre-label">Techniques</span>
+    <ul class="mitre-techs">
+      {{- range . }}
+      <li><a href="https://attack.mitre.org/techniques/{{ replace .id "." "/" }}/"
+             rel="noopener nofollow"><code>{{ .id }}</code></a> {{ .name }}</li>
+      {{- end }}
+    </ul>
+  </div>
+  {{- end }}
+  {{- if and (not $d.tactics) (not $d.techniques) }}
+  <p class="mitre-empty">No ATT&CK mapping is attached to the alerts for this sample.</p>
+  {{- end }}
+</div>
