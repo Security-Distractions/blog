@@ -1,0 +1,49 @@
+{{- /*
+  Overrides Hugo's built-in alias template.
+
+  The default alias stub is a bare redirect: title, canonical, charset, refresh. Social scrapers
+  do not follow the meta refresh, so a link shared at an old URL previewed as nothing at all —
+  worse than the plain text box, because there is no title or description to fall back on either.
+
+  Post slugs were renamed once, so several published URLs are aliases. This gives those stubs the
+  same Open Graph and Twitter tags as their target, meaning an old link still previews correctly
+  while continuing to redirect real browsers.
+
+  Context here is not a Page: it provides .Permalink (the target URL) and .Page (the target page),
+  so everything below reads from .Page.
+
+  noindex is deliberate — the canonical URL should be the one that ranks.
+*/ -}}
+{{- $p := .Page -}}
+<!DOCTYPE html>
+<html lang="{{ $p.Language.LanguageCode | default "en" }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ $p.Title | default .Permalink }}</title>
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta name="robots" content="noindex, follow">
+
+  {{- $desc := "" -}}
+  {{- with $p.Description }}{{ $desc = . }}{{ else }}{{ with $p.Summary }}{{ $desc = (. | plainify | truncate 200) }}{{ else }}{{ $desc = site.Params.description }}{{ end }}{{ end -}}
+  {{- $og := partial "og-image.html" $p -}}
+
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:title" content="{{ $p.Title | default site.Title }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:image" content="{{ $og }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ $p.Title | default site.Title }} — securitydistractions">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ $og }}">
+  <meta name="twitter:title" content="{{ $p.Title | default site.Title }}">
+  <meta name="twitter:description" content="{{ $desc }}">
+
+  <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+</head>
+<body>
+  <p>This page has moved to <a href="{{ .Permalink }}">{{ .Permalink }}</a>.</p>
+</body>
+</html>
