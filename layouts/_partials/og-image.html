@@ -1,0 +1,79 @@
+{{- /*
+  Builds a 1200×630 social preview card for a page and returns its permalink, so LinkedIn,
+  Slack and the rest show branded artwork instead of a text box.
+
+    {{ $og := partial "og-image.html" . }}
+
+  Everything is generated at build time by Hugo's image processing — no external tooling.
+
+  The dark canvas is made from the logo itself: a 12×12 patch of its black corner, stretched to
+  1200×630. That avoids needing a separate background asset, and guarantees the card background
+  matches the logo's own black exactly.
+
+  The page title is wrapped in the template because images.Text does not wrap, then drawn under
+  the logo. Pages without a title (the home page) get the logo card alone.
+*/ -}}
+{{- $logo := resources.Get "img/logo.png" -}}
+{{- $font := resources.Get "fonts/DejaVuSans-Bold.ttf" -}}
+{{- $mono := resources.Get "fonts/DejaVuSansMono.ttf" -}}
+{{- if not $logo -}}{{- errorf "og-image: assets/img/logo.png is missing" -}}{{- end -}}
+
+{{- /* canvas: stretch a black patch of the logo to card size */ -}}
+{{- $card := ($logo.Crop "12x12 topleft").Resize "1200x630" -}}
+
+{{- /* brand mark, top-left */ -}}
+{{- $mark := $logo.Resize "560x" -}}
+{{- $card = $card.Filter (images.Overlay $mark 58 44) -}}
+
+{{- $title := "" -}}
+{{- if .IsHome -}}
+  {{- $title = site.Params.description | default "" -}}
+{{- else -}}
+  {{- $title = .Title -}}
+{{- end -}}
+
+{{- /* wrap to ~30 characters a line, on word boundaries, max four lines */ -}}
+{{- $lines := slice -}}
+{{- $cur := "" -}}
+{{- range (split $title " ") -}}
+  {{- $w := . -}}
+  {{- if eq $cur "" -}}
+    {{- $cur = $w -}}
+  {{- else if le (add (add (len $cur) 1) (len $w)) 30 -}}
+    {{- $cur = printf "%s %s" $cur $w -}}
+  {{- else -}}
+    {{- $lines = $lines | append $cur -}}
+    {{- $cur = $w -}}
+  {{- end -}}
+{{- end -}}
+{{- with $cur }}{{ $lines = $lines | append . }}{{ end -}}
+{{- if gt (len $lines) 4 -}}
+  {{- $lines = first 4 $lines -}}
+{{- end -}}
+
+{{- /* title block, then the domain in mono as a footer */ -}}
+{{- $y := 330 -}}
+{{- range $lines -}}
+  {{- $card = $card.Filter (images.Text . (dict
+        "color" "#eaf4ff" "size" 44 "x" 62 "y" $y "font" $font "linespacing" 8)) -}}
+  {{- $y = add $y 58 -}}
+{{- end -}}
+{{- if $mono -}}
+  {{- $card = $card.Filter (images.Text "securitydistractions.com" (dict
+        "color" "#ff2d95" "size" 24 "x" 62 "y" 566 "font" $mono)) -}}
+{{- end -}}
+
+{{- /* Stable filename per page so the URL does not churn between builds.
+       .File is nil on generated pages - home, taxonomy terms, list pages - so it cannot be
+       dereferenced unconditionally; that is what broke the first build of this partial. */ -}}
+{{- $slug := "" -}}
+{{- if .File -}}
+  {{- $slug = .File.BaseFileName -}}
+{{- else if .IsHome -}}
+  {{- $slug = "home" -}}
+{{- else -}}
+  {{- $slug = or (urlize (or .Title "page")) "page" -}}
+{{- end -}}
+{{- $name := printf "og/%s.png" $slug -}}
+{{- $out := $card | resources.Copy $name -}}
+{{- $out.Permalink -}}

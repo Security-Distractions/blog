@@ -1,0 +1,15 @@
+{{- /*
+  Overrides PaperMod's twitter_cards.html.
+
+  The theme emits `twitter:card = summary` whenever a page has no cover.image and no page
+  resources, which is every page here. Adding a large-image card in extend_head as well produced
+  two conflicting twitter:card tags in the same document, so this replaces the theme's version
+  outright and emits exactly one set.
+
+  The image is the generated social card (partials/og-image.html).
+*/ -}}
+{{- $og := partial "og-image.html" . -}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ $og }}">
+<meta name="twitter:title" content="{{ .Title | default site.Title }}">
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . | plainify | truncate 200 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">

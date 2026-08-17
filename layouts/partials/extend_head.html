@@ -2,3 +2,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#020618">
+
+{{- /* og:image. PaperMod only emits one when a page sets cover.image or carries page
+       resources, so without this LinkedIn and Slack render a bare text box. The card is
+       generated from the logo at build time by partials/og-image.html.
+       twitter:* tags come from the overridden templates/twitter_cards.html, not from here —
+       emitting them in both places produced two conflicting twitter:card values. */ -}}
+{{- if not .Params.cover.image }}
+{{- $og := partial "og-image.html" . }}
+<meta property="og:image" content="{{ $og }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ .Title | default site.Title }} — securitydistractions">
+{{- end }}
