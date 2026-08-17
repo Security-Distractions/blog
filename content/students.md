@@ -44,7 +44,7 @@ Bookmark this page. Anything you need during the course is linked here.
 <div class="link-cards">
 
 {{< linkcard title="CTI exercise vault" accent="violet" tag="Obsidian · GitHub"
-    url="https://github.com/dclayton454/cyberbridge-summerschool2026"
+    url="https://github.com/Security-Distractions/cyberbridge-summerschool2026"
     desc="The threat intelligence exercise. Code → Download ZIP, unzip, then in Obsidian choose Open folder as vault and start at 00 Start Here." >}}
 
 </div>
