@@ -77,7 +77,8 @@ on-host lifetime approximately 25 seconds.
 - **DNS** - nothing resolved during the window that was not ordinary operating-system traffic.
 - **Firewall** - no blocked egress from the host.
 - **Squid proxy, 874 parsed records across 10:20-11:10** - every destination in the window belongs
-  either to routine OS and browser activity, or to my own fetching of the sample beforehand. Each one
+  either to routine operating-system and browser activity, or to the analyst retrieval of the sample
+  beforehand. Each one
   carries a browser or named-updater user-agent and, apart from the sample download, all of it
   pre-dates execution. Nothing during the detonation itself is attributable to the sample.
 
@@ -87,12 +88,12 @@ on-host lifetime approximately 25 seconds.
 
 66 distinct destinations across the hour, and none of them is an indicator. Everything that is not
 routine operating-system or browser traffic pre-dates the detonation, and the only download of
-interest is my own retrieval of the sample from MalwareBazaar at 10:21:22–30. Between 10:22:48 and
+interest is the analyst retrieval of the sample from MalwareBazaar at 10:21:22–30. Between 10:22:48 and
 10:24:30 — the entire execution — the proxy saw nothing but ordinary Microsoft and browser activity.
 
-I am deliberately not listing those destinations. They are benign OS and browser endpoints, and
-publishing them under a heading like "indicators" is how a defender ends up alerting on Windows
-telemetry or a font CDN. The finding here is an absence, and an absence does not have IOCs.
+Those destinations are deliberately not listed. They are benign operating-system and browser
+endpoints, and publishing them under a heading like "indicators" is how a defender ends up alerting on
+Windows telemetry or a font CDN. The finding here is an absence, and an absence has no indicators.
 
 Note also that the sample's processes generated **no endpoint network events at all**, so the
 possibility of C2 tunnelled inside allowed sessions is excluded too — nothing belonging to the sample
