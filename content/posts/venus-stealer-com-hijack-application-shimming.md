@@ -1,7 +1,7 @@
 ---
 title: "Venus Stealer: COM hijack and application shimming, with C2 that never resolved"
 date: 2026-08-17T10:56:07Z
-draft: false
+draft: true
 aliases: ["/posts/venus-stealer-that-never-stole/"]
 tags: ["malware", "detonation", "elastic", "detection", "venus-stealer", "dns"]
 summary: "A Venus Stealer sample established persistence through application shimming and a COM registry override, then queried DNS for a .top command-and-control domain that never resolved. No collection was observed."

@@ -1,7 +1,7 @@
 ---
 title: "Cobalt Strike beacon delivered inside a trojanised Electron application"
 date: 2026-08-17T11:21:07Z
-draft: false
+draft: true
 aliases: ["/posts/cobalt-strike-inside-an-electron-app/"]
 tags: ["malware", "detonation", "elastic", "detection", "cobalt-strike", "shellcode"]
 summary: "A trojanised Electron installer that presents as an ordinary desktop application unhooked ntdll, timestomped itself, and ran a Cobalt Strike beacon. 101 alerts across 15 rules."

@@ -1,7 +1,7 @@
 ---
 title: "Unattributed .NET RAT: keylogging, Run-key persistence and System32 masquerading"
 date: 2026-08-17T10:31:07Z
-draft: false
+draft: true
 aliases: ["/posts/dotnet-rat-with-no-name/"]
 tags: ["malware", "detonation", "elastic", "detection", "rat", "keylogger"]
 summary: "A .NET remote-access trojan self-copied under a Windows binary name, established Run-key persistence, and collected keystrokes. No family attribution is available from any source."

@@ -1,7 +1,7 @@
 ---
 title: "ValleyRAT: shellcode injection, SYSTEM-level Defender tampering and confirmed C2"
 date: 2026-08-17T12:11:07Z
-draft: false
+draft: true
 aliases: ["/posts/valleyrat-324-alerts-39-rules/"]
 tags: ["malware", "detonation", "elastic", "detection", "valleyrat", "edr-evasion"]
 summary: "A ValleyRAT loader injected unbacked shellcode, escalated to SYSTEM, neutralised Microsoft Defender through scheduled tasks, established service and Run-key persistence, and beaconed to three confirmed C2 addresses."

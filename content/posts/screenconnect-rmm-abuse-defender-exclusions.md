@@ -1,7 +1,7 @@
 ---
 title: "PyInstaller dropper installs ScreenConnect and blankets Defender with exclusions"
 date: 2026-08-17T11:46:07Z
-draft: false
+draft: true
 aliases: ["/posts/rmm-abuse-and-a-rejected-attribution/"]
 tags: ["malware", "detonation", "elastic", "detection", "rmm", "screenconnect", "threat-intel"]
 summary: "A PyInstaller dropper deployed ScreenConnect as its remote access, excluded whole drive letters from Microsoft Defender, and disabled UAC and script-block logging. Its threat-intel label says ransomware; the evidence does not support it."
