@@ -1,3 +1,17 @@
+{{- /* Paint the theme before the external stylesheet lands.
+
+       head.html emits the bundle as rel="preload stylesheet", and browsers that honour only the
+       preload token treat it as non-blocking — so the HTML paints unstyled first, giving a white
+       flash with bare text at the top. Firefox and Safari are the usual culprits; Chromium blocks
+       on it correctly, which is why it does not reproduce there.
+
+       These two lines make that flash impossible in any browser: color-scheme dark paints the
+       initial canvas dark before any CSS is parsed, and the inline rule sets the same background
+       and text colour the bundle will later set, so there is nothing to flash to. Values are
+       --black and --content from assets/css/extended/cyberpunk.css; keep them in step. */ -}}
+<meta name="color-scheme" content="dark">
+<style>:root{color-scheme:dark}html,body{background:#02030a;color:#d2dff5}</style>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
