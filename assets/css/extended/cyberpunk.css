@@ -916,3 +916,11 @@ a.link-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
 .alert-src { display: inline-block; margin-right: 7px; padding: 0 6px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; letter-spacing: .08em;
   text-transform: uppercase; color: var(--neon-emerald); border: 1px solid rgba(57,255,158,.45); }
+
+/* Read count at the foot of a post. Deliberately quiet — it is for the author, not a badge. */
+.read-count {
+  margin: 26px 0 0; padding-top: 14px; border-top: 1px solid var(--line);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--secondary); opacity: .75;
+}

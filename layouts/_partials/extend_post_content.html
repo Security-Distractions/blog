@@ -1,0 +1,22 @@
+{{- /*
+  Read count, rendered directly under the post body.
+
+  Overrides the theme's own extend_post_content.html, which exists for exactly this purpose and is
+  invoked from single.html with the page context.
+
+  Note extend_footer.html cannot be used for anything page-specific: baseof.html renders the footer
+  with `partialCached ... .Layout .Kind`, so one footer is computed per layout/kind and reused across
+  every page — a count placed there shows the same number everywhere.
+
+  The number comes from data/counts.json, written by /usr/local/bin/blog-counts.py from the nginx
+  access log before each build, so it is static markup. Nothing runs in the reader's browser: no
+  request to block, and it works with JavaScript disabled. Counts are up to ~5 minutes stale.
+
+  Renders nothing for a post with no reads yet, rather than showing "0", and nothing for
+  non-post single pages such as /students/.
+*/ -}}
+{{- if eq .Section "posts" }}
+{{- with index site.Data.counts .RelPermalink }}
+<p class="read-count">{{ . }} read{{ if ne (int .) 1 }}s{{ end }}</p>
+{{- end }}
+{{- end }}
