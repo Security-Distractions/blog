@@ -1,13 +1,17 @@
 {{- /*
-  Chronological timeline of the intrusion, in the style The DFIR Report presents one — but
-  as a table rather than an image, so it is searchable, selectable and readable on a phone.
+  Key events of the intrusion, in the order they happened — the timeline The DFIR Report puts in
+  each case, rather than a log of every rule that fired.
 
     {{< timeline key="valleyrat_shellcode_loader" >}}
 
-  Reads site.Data.detonations.<key>.timeline, which holds the first firing of each detection
-  rule in time order, taken from the alert documents themselves. Only first occurrences are
-  listed: a rule that fires 60 times contributes one row, at the moment it first saw the
-  behaviour.
+  Reads site.Data.detonations.<key>.timeline. Each row is one step of the attack, carrying its
+  tactic and technique. Detections are counted separately under Detections: a rule firing sixty
+  times is one event here, or none, if it evidenced nothing new.
+
+  Every timestamp is observed, and each row records which telemetry it came from:
+    process — process-creation telemetry
+    alert   — the alert that evidenced the behaviour, where no process event witnesses it
+  Nothing here is interpolated.
 
   Params:
     key   (required) data file under data/detonations/
@@ -19,24 +23,31 @@
 <div class="tl-wrap">
   <div class="tl-head">
     <span class="tl-title">Timeline</span>
-    <span class="tl-meta">{{ len . }} distinct detections · first firing of each ·
-      {{ (index . 0).time | time.Format "2 Jan 2006" }} UTC</span>
+    <span class="tl-meta">{{ len . }} key events · {{ substr (index . 0).time 0 10 }} ·
+      {{ substr (index . 0).time 11 8 }}–{{ substr (index . (sub (len .) 1)).time 11 8 }} UTC</span>
   </div>
   <ol class="tl-rows">
     {{- range . }}
     <li class="tl-row">
       <span class="tl-time">{{ substr .time 11 8 }}</span>
-      <span class="tl-mark" aria-hidden="true"></span>
-      <span class="tl-event">{{ .event }}
-        {{- with .process }}{{/* samples named after their own hash blow the column out */}}
-        <span class="tl-proc" title="{{ . }}">{{ cond (gt (len .) 30) (printf "%s…" (substr . 0 26)) . }}</span>
-        {{- end }}</span>
+      <span class="tl-mark{{ with .tactic }} tl-{{ lower (replace . " " "-") }}{{ end }}" aria-hidden="true"></span>
+      <div class="tl-body">
+        <span class="tl-event">{{ .event }}</span>
+        <span class="tl-tags">
+          {{- with .tactic }}<span class="tl-tactic">{{ . }}</span>{{ end }}
+          {{- with .mitre }}<a class="tl-mitre" rel="noopener nofollow"
+             href="https://attack.mitre.org/techniques/{{ replace . "." "/" }}/">{{ . }}</a>{{ end }}
+          {{- if eq .source "alert" }}<span class="tl-src"
+             title="No process event witnesses this step, so the time is taken from the alert that evidenced it">alert-evidenced</span>{{ end }}
+        </span>
+        {{- with .detail }}<span class="tl-detail">{{ . }}</span>{{ end }}
+      </div>
     </li>
     {{- end }}
   </ol>
-  <p class="tl-foot">Times are UTC, from the alert documents. Each row is the first time that
-    rule fired; repeat firings are counted under Detections.</p>
+  <p class="tl-foot">Times are UTC and observed, not interpolated — taken from process-creation
+    telemetry, or from the alert that evidenced the step where no process event witnesses it.</p>
 </div>
 {{- else }}
-<p class="tl-empty">No detection timeline is available for this sample.</p>
+<p class="tl-empty">No timeline is available for this sample.</p>
 {{- end }}
