@@ -17,10 +17,15 @@ attack path first, then the alerts, then what the volume obscured.
 
 {{< cti key="valleyrat_shellcode_loader" >}}
 
-## The attack path
+## The execution chain
 
-Each step below is generated from the Compromise Canvas export, so it is the same
-path the tool renders rather than a screenshot that will drift out of date.
+This is the whole thing, drawn from the Compromise Canvas export: sixty-five processes and
+forty-six spawn relationships, coloured by tactic. It opens on a readable window — press **fit**
+to see how far it actually sprawls, which is itself the finding.
+
+{{< canvas key="valleyrat_overview" height="520" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-08-valleyrat-shellcode-loader/canvas/overview.json" >}}
+
+Collapsed to the eight steps that matter, the same path reads like this.
 
 {{< attackpath key="valleyrat_shellcode_loader" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-08-valleyrat-shellcode-loader/canvas/on-host-attack-path.json" >}}
 

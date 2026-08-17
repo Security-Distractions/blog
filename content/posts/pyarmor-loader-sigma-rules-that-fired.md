@@ -22,8 +22,11 @@ establish. Below is the path, the alerts, and why a silent rule is not automatic
 
 ## The attack path
 
-Each step below is generated from the Compromise Canvas export, so it is the same
-path the tool renders rather than a screenshot that will drift out of date.
+Both the diagram and the steps below are rendered from the Compromise Canvas export itself, so this
+is the same picture the tool draws — not a screenshot that will drift out of date. Drag to pan,
+scroll to zoom.
+
+{{< canvas key="pyarmor_pyinstaller_loader" height="560" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-17-pyarmor-pyinstaller-loader/canvas/on-host-attack-path.json" >}}
 
 {{< attackpath key="pyarmor_pyinstaller_loader" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-17-pyarmor-pyinstaller-loader/canvas/on-host-attack-path.json" >}}
 

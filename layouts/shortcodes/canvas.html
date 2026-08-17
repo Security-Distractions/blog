@@ -1,0 +1,220 @@
+{{- /*
+  Renders a Compromise Canvas export as an interactive SVG diagram, using the canvas's own
+  node coordinates and edges — so the picture in the post is the picture in the tool.
+
+    {{< canvas key="valleyrat_shellcode_loader_overview" height="470" >}}
+
+  Reads site.Data.attackpaths.<key>. Nodes carry position{x,y} but no dimensions, because
+  CompromiseCanvas draws fixed-size cards; the export's 330×200 grid spacing implies a
+  280×150 card, which is what is drawn here.
+
+  Edges are coloured by data.actionType (the tactic), and a legend is emitted for the tactics
+  actually present rather than all of them.
+
+  These graphs can be very wide — the ValleyRAT execution chain is over 7000px — so the SVG
+  opens showing full height and roughly a screen's worth of width, and can be dragged and
+  zoomed. With JavaScript off it degrades to a static, scaled diagram.
+
+  Params:
+    key      (required) data file under data/attackpaths/
+    height   viewport height in px (default 470)
+    download optional URL to the canvas JSON
+*/ -}}
+{{- $key := .Get "key" -}}
+{{- $c := index site.Data.attackpaths $key -}}
+{{- if not $c -}}{{- errorf "canvas: no canvas data for key %q" $key -}}{{- end -}}
+{{- $h := int (.Get "height" | default 470) -}}
+{{- $CW := 280 -}}{{- $CH := 150 -}}{{- $PAD := 46 -}}
+
+{{- /* index positions and data by node id so edges can be resolved */ -}}
+{{- $pos := dict -}}{{- $nd := dict -}}{{- $groups := slice -}}{{- $cards := slice -}}
+{{- range $c.diagram.nodes -}}
+  {{- $pos = merge $pos (dict .id .position) -}}
+  {{- $nd = merge $nd (dict .id .data) -}}
+  {{- if eq .type "labeledGroupNode" -}}{{- $groups = $groups | append . -}}
+  {{- else -}}{{- $cards = $cards | append . -}}{{- end -}}
+{{- end -}}
+
+{{- /* bounds over cards and group frames */ -}}
+{{- $minX := 1e9 -}}{{- $minY := 1e9 -}}{{- $maxX := -1e9 -}}{{- $maxY := -1e9 -}}
+{{- range $cards -}}
+  {{- $minX = math.Min $minX .position.x -}}{{- $minY = math.Min $minY .position.y -}}
+  {{- $maxX = math.Max $maxX (add .position.x $CW) -}}{{- $maxY = math.Max $maxY (add .position.y $CH) -}}
+{{- end -}}
+{{- range $groups -}}
+  {{- $minX = math.Min $minX .position.x -}}{{- $minY = math.Min $minY .position.y -}}
+  {{- $maxX = math.Max $maxX (add .position.x (.data.width | default 400)) -}}
+  {{- $maxY = math.Max $maxY (add .position.y (.data.height | default 300)) -}}
+{{- end -}}
+{{- $vx := sub $minX $PAD -}}{{- $vy := sub $minY $PAD -}}
+{{- $vw := add (sub $maxX $minX) (mul $PAD 2) -}}{{- $vh := add (sub $maxY $minY) (mul $PAD 2) -}}
+{{- /* Open on a window rather than the whole graph. Fitting a 7000px-wide diagram into an
+       780px column scales node text down to ~7px, which is unreadable; capping the initial
+       view keeps labels legible and leaves the sprawl to the "fit" button. */ -}}
+{{- $ih := int (math.Min $vh 720) -}}
+{{- $iw := int (math.Min $vw (mul $ih 1.55)) -}}
+{{- $tactics := slice -}}
+{{- range $c.diagram.edges -}}
+  {{- with .data -}}{{- with .actionType -}}
+    {{- if not (in $tactics .) -}}{{- $tactics = $tactics | append . -}}{{- end -}}
+  {{- end -}}{{- end -}}
+{{- end -}}
+{{- $uid := printf "cv-%s" (substr (md5 $key) 0 8) -}}
+
+<figure class="canvas-fig" data-canvas="{{ $uid }}">
+  <figcaption class="canvas-head">
+    <span class="canvas-title">{{ $c.canvasTitle | default "Compromise canvas" }}</span>
+    <span class="canvas-meta">{{ len $cards }} nodes · {{ len $c.diagram.edges }} edges</span>
+    <span class="canvas-tools">
+      <button type="button" class="cv-btn" data-cv="out" aria-label="Zoom out">−</button>
+      <button type="button" class="cv-btn" data-cv="in" aria-label="Zoom in">+</button>
+      <button type="button" class="cv-btn" data-cv="fit" aria-label="Fit whole diagram">fit</button>
+      <button type="button" class="cv-btn" data-cv="reset" aria-label="Reset view">reset</button>
+    </span>
+  </figcaption>
+
+  <div class="canvas-stage" style="height:{{ $h }}px">
+    <svg class="canvas-svg" role="img"
+         viewBox="{{ int $vx }} {{ int $vy }} {{ $iw }} {{ $ih }}"
+         data-full="{{ int $vx }} {{ int $vy }} {{ int $vw }} {{ int $vh }}"
+         data-init="{{ int $vx }} {{ int $vy }} {{ $iw }} {{ $ih }}"
+         preserveAspectRatio="xMinYMid meet">
+      <title>{{ $c.canvasTitle }}</title>
+      <defs>
+        <marker id="{{ $uid }}-ah" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+        </marker>
+        <filter id="{{ $uid }}-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {{- /* group frames first, behind everything */ -}}
+      {{- range $groups }}
+      <g class="cv-group">
+        <rect x="{{ .position.x }}" y="{{ .position.y }}"
+              width="{{ .data.width | default 400 }}" height="{{ .data.height | default 300 }}"
+              rx="10" class="cv-group-rect"/>
+        <text x="{{ int (add .position.x 20) }}" y="{{ int (add .position.y 34) }}" class="cv-group-label">{{ .data.label }}</text>
+      </g>
+      {{- end }}
+
+      {{- /* edges */ -}}
+      <g class="cv-edges">
+      {{- range $c.diagram.edges }}
+        {{- $s := index $pos .source }}{{- $t := index $pos .target }}
+        {{- if and $s $t }}
+          {{- $tac := "other" }}{{- with .data }}{{ with .actionType }}{{ $tac = lower (replace . " " "-") }}{{ end }}{{ end }}
+          {{- $dx := sub $t.x $s.x }}{{- $dy := sub $t.y $s.y }}
+          {{- $vertical := gt (math.Abs $dy) (math.Abs $dx) }}
+          {{- if $vertical }}
+            {{- $sx := add $s.x (div $CW 2) }}{{- $sy := cond (gt $dy 0) (add $s.y $CH) $s.y }}
+            {{- $tx := add $t.x (div $CW 2) }}{{- $ty := cond (gt $dy 0) $t.y (add $t.y $CH) }}
+            {{- $c1 := add $sy (cond (gt $dy 0) 70 -70) }}{{- $c2 := sub $ty (cond (gt $dy 0) 70 -70) }}
+        <path class="cv-edge tac-{{ $tac }}" marker-end="url(#{{ $uid }}-ah)"
+              d="M{{ int $sx }},{{ int $sy }} C{{ int $sx }},{{ int $c1 }} {{ int $tx }},{{ int $c2 }} {{ int $tx }},{{ int $ty }}"/>
+          {{- else }}
+            {{- $sx := cond (gt $dx 0) (add $s.x $CW) $s.x }}{{- $sy := add $s.y (div $CH 2) }}
+            {{- $tx := cond (gt $dx 0) $t.x (add $t.x $CW) }}{{- $ty := add $t.y (div $CH 2) }}
+            {{- $off := math.Max 60 (div (math.Abs $dx) 2) }}
+            {{- $c1 := add $sx (cond (gt $dx 0) $off (mul $off -1)) }}
+            {{- $c2 := sub $tx (cond (gt $dx 0) $off (mul $off -1)) }}
+        <path class="cv-edge tac-{{ $tac }}" marker-end="url(#{{ $uid }}-ah)"
+              d="M{{ int $sx }},{{ int $sy }} C{{ int $c1 }},{{ int $sy }} {{ int $c2 }},{{ int $ty }} {{ int $tx }},{{ int $ty }}">
+          {{- with .data }}{{ with .description }}<title>{{ . }}</title>{{ end }}{{ end -}}
+        </path>
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      </g>
+
+      {{- /* node cards */ -}}
+      <g class="cv-nodes">
+      {{- range $cards }}
+        {{- $d := .data }}
+        {{- $crit := lower ($d.criticality | default "medium") }}
+        {{- $lbl := $d.label | default .id }}
+        {{- $short := cond (gt (len $lbl) 30) (printf "%s…" (substr $lbl 0 29)) $lbl }}
+      <g class="cv-node crit-{{ $crit }}{{ if $d.isCompromised }} is-compromised{{ end }}"
+         transform="translate({{ .position.x }},{{ .position.y }})">
+        <title>{{ $lbl }}{{ with $d.description }} — {{ . }}{{ end }}</title>
+        <rect width="{{ $CW }}" height="{{ $CH }}" rx="8" class="cv-card"/>
+        <rect width="5" height="{{ $CH }}" class="cv-card-edge"/>
+        <text x="22" y="42" class="cv-node-label">{{ $short }}</text>
+        {{- with $d.os }}<text x="22" y="70" class="cv-node-sub">{{ . }}</text>{{ end }}
+        {{- with $d.ipAddress }}<text x="22" y="94" class="cv-node-sub">{{ . }}</text>{{ end }}
+        <text x="22" y="{{ int (sub $CH 24) }}" class="cv-node-crit">{{ $d.criticality | default "" }}</text>
+        {{- if $d.actions }}
+        <text x="{{ int (sub $CW 22) }}" y="{{ int (sub $CH 24) }}" class="cv-node-steps" text-anchor="end">{{ len $d.actions }} steps</text>
+        {{- end }}
+        {{- if $d.isCompromised }}<circle cx="{{ int (sub $CW 24) }}" cy="34" r="6" class="cv-dot"/>{{ end }}
+      </g>
+      {{- end }}
+      </g>
+    </svg>
+    <span class="canvas-hint">drag to pan · scroll to zoom</span>
+  </div>
+
+  {{- with $tactics }}
+  <div class="canvas-legend">
+    {{- range . }}<span class="cv-key tac-{{ lower (replace . " " "-") }}"><i></i>{{ . }}</span>{{ end -}}
+  </div>
+  {{- end }}
+  {{- with .Get "download" }}
+  <p class="canvas-foot"><a href="{{ . }}" rel="noopener">Download the canvas JSON</a> to open it in
+    <a href="https://github.com/SagaLabs/CompromiseCanvas" rel="noopener nofollow">CompromiseCanvas</a>.</p>
+  {{- end }}
+</figure>
+
+{{- if not (.Page.Scratch.Get "canvasJS") }}{{ .Page.Scratch.Set "canvasJS" true }}
+<script>
+/* Pan/zoom for canvas diagrams. Progressive enhancement: without this the SVG is a
+   static scaled diagram, which is why the viewBox is already correct in the markup. */
+(function () {
+  document.querySelectorAll(".canvas-fig").forEach(function (fig) {
+    var svg = fig.querySelector(".canvas-svg");
+    if (!svg) return;
+    var parse = function (s) { var a = s.trim().split(/\s+/).map(Number); return { x: a[0], y: a[1], w: a[2], h: a[3] }; };
+    var full = parse(svg.dataset.full), init = parse(svg.dataset.init), vb = Object.assign({}, init);
+    var apply = function () { svg.setAttribute("viewBox", vb.x + " " + vb.y + " " + vb.w + " " + vb.h); };
+    var zoom = function (f, cx, cy) {
+      var nw = vb.w * f, nh = vb.h * f;
+      if (nw > full.w * 3 || nw < full.w / 40) return;          // sane bounds
+      vb.x = cx - (cx - vb.x) * f; vb.y = cy - (cy - vb.y) * f; vb.w = nw; vb.h = nh; apply();
+    };
+    fig.querySelectorAll(".cv-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var a = b.dataset.cv, cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2;
+        if (a === "in") zoom(0.75, cx, cy);
+        else if (a === "out") zoom(1.33, cx, cy);
+        else { vb = Object.assign({}, a === "fit" ? full : init); apply(); }
+      });
+    });
+    svg.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      var r = svg.getBoundingClientRect();
+      var cx = vb.x + (e.clientX - r.left) / r.width * vb.w;
+      var cy = vb.y + (e.clientY - r.top) / r.height * vb.h;
+      zoom(e.deltaY > 0 ? 1.12 : 0.89, cx, cy);
+    }, { passive: false });
+    var drag = null;
+    svg.addEventListener("pointerdown", function (e) {
+      drag = { x: e.clientX, y: e.clientY, vx: vb.x, vy: vb.y };
+      svg.setPointerCapture(e.pointerId); svg.classList.add("is-grabbing");
+    });
+    svg.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var r = svg.getBoundingClientRect();
+      vb.x = drag.vx - (e.clientX - drag.x) / r.width * vb.w;
+      vb.y = drag.vy - (e.clientY - drag.y) / r.height * vb.h;
+      apply();
+    });
+    var end = function () { drag = null; svg.classList.remove("is-grabbing"); };
+    svg.addEventListener("pointerup", end);
+    svg.addEventListener("pointercancel", end);
+  });
+})();
+</script>
+{{- end }}

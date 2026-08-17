@@ -757,3 +757,77 @@ a.link-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
   .cti-grid dd { padding-bottom: 10px; }
   .attack-step { grid-template-columns: 26px minmax(0,1fr); gap: 10px; padding: 12px 14px; }
 }
+
+/* --- canvas diagram (inline SVG, pan/zoom) ------------------------------- */
+.canvas-fig {
+  margin: 34px 0; background: var(--panel); border: 1px solid var(--line);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.canvas-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 18px; background: var(--panel-hi); border-bottom: 1px solid var(--line);
+}
+.canvas-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--neon-cyan);
+}
+.canvas-meta { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--secondary); }
+.canvas-tools { margin-left: auto; display: flex; gap: 6px; }
+.cv-btn {
+  min-width: 30px; padding: 2px 8px; cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px;
+  color: var(--neon-cyan); background: var(--panel); border: 1px solid var(--line);
+}
+.cv-btn:hover { color: var(--black); background: var(--neon-cyan); border-color: var(--neon-cyan); }
+.canvas-stage { position: relative; overflow: hidden; background:
+  radial-gradient(circle at 18% 12%, rgba(34,211,238,.07), transparent 62%), var(--black); }
+.canvas-svg { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.canvas-svg.is-grabbing { cursor: grabbing; }
+.canvas-hint {
+  position: absolute; right: 12px; bottom: 10px; pointer-events: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px;
+  letter-spacing: .06em; color: var(--secondary); opacity: .75;
+}
+.cv-group-rect { fill: rgba(255,45,149,.05); stroke: rgba(255,45,149,.35); stroke-width: 2; stroke-dasharray: 10 8; }
+.cv-group-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 20px;
+  letter-spacing: .08em; fill: var(--neon-magenta-hi); opacity: .8;
+}
+.cv-edge { fill: none; stroke-width: 2.4; opacity: .65; color: #8ba0c4; stroke: #8ba0c4; }
+.cv-edge:hover { opacity: 1; stroke-width: 3.4; }
+.cv-edge.tac-execution { stroke: var(--neon-amber); color: var(--neon-amber); }
+.cv-edge.tac-defense-evasion { stroke: var(--neon-magenta); color: var(--neon-magenta); }
+.cv-edge.tac-persistence { stroke: var(--neon-violet); color: var(--neon-violet); }
+.cv-edge.tac-command-and-control { stroke: var(--neon-cyan); color: var(--neon-cyan); }
+.cv-edge.tac-initial-access { stroke: var(--neon-emerald); color: var(--neon-emerald); }
+.cv-edge.tac-impact { stroke: #ff5f5f; color: #ff5f5f; }
+.cv-card { fill: #070b16; stroke: var(--line); stroke-width: 1.5; }
+.cv-node:hover .cv-card { stroke: var(--neon-cyan); }
+.cv-card-edge { fill: var(--secondary); }
+.crit-critical .cv-card-edge { fill: var(--neon-magenta); }
+.crit-high .cv-card-edge { fill: var(--neon-amber); }
+.crit-medium .cv-card-edge { fill: var(--neon-cyan); }
+.crit-low .cv-card-edge { fill: var(--secondary); }
+.is-compromised .cv-card { fill: #12060f; }
+.cv-node-label { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 19px; fill: var(--primary); }
+.cv-node-sub { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; fill: var(--secondary); }
+.cv-node-crit, .cv-node-steps {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+  letter-spacing: .1em; text-transform: uppercase; fill: var(--secondary);
+}
+.crit-critical .cv-node-crit { fill: var(--neon-magenta); }
+.crit-high .cv-node-crit { fill: var(--neon-amber); }
+.cv-node-steps { fill: var(--neon-cyan); }
+.cv-dot { fill: var(--neon-magenta); }
+.canvas-legend { display: flex; flex-wrap: wrap; gap: 14px; padding: 11px 18px; border-top: 1px solid var(--line); }
+.cv-key { display: inline-flex; align-items: center; gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--secondary); }
+.cv-key i { width: 16px; height: 3px; background: currentColor; display: inline-block; }
+.cv-key.tac-execution { color: var(--neon-amber); }
+.cv-key.tac-defense-evasion { color: var(--neon-magenta); }
+.cv-key.tac-persistence { color: var(--neon-violet); }
+.cv-key.tac-command-and-control { color: var(--neon-cyan); }
+.cv-key.tac-initial-access { color: var(--neon-emerald); }
+.cv-key.tac-impact { color: #ff5f5f; }
+.canvas-foot { margin: 0; padding: 12px 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--secondary); }
+@media (max-width: 620px) { .canvas-hint { display: none; } .canvas-tools { margin-left: 0; } }
