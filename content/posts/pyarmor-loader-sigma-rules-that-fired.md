@@ -26,7 +26,7 @@ Both the diagram and the steps below are rendered from the Compromise Canvas exp
 is the same picture the tool draws — not a screenshot that will drift out of date. Drag to pan,
 scroll to zoom.
 
-{{< canvas key="pyarmor_pyinstaller_loader" height="560" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-17-pyarmor-pyinstaller-loader/canvas/on-host-attack-path.json" >}}
+{{< canvas key="pyarmor_pyinstaller_loader" height="430" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-17-pyarmor-pyinstaller-loader/canvas/on-host-attack-path.json" >}}
 
 {{< attackpath key="pyarmor_pyinstaller_loader" download="https://github.com/Security-Distractions/cti-driven-detection-engine/raw/main/detonations/2026-08-17-pyarmor-pyinstaller-loader/canvas/on-host-attack-path.json" >}}
 

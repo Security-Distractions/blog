@@ -59,12 +59,14 @@
     {{- if not (in $tactics .) -}}{{- $tactics = $tactics | append . -}}{{- end -}}
   {{- end -}}{{- end -}}
 {{- end -}}
+{{- /* only label edges when the graph is sparse; on a 46-edge chain labels collide */ -}}
+{{- $showEdgeLabels := le (len $c.diagram.edges) 8 -}}
 {{- $uid := printf "cv-%s" (substr (md5 $key) 0 8) -}}
 
 <figure class="canvas-fig" data-canvas="{{ $uid }}">
   <figcaption class="canvas-head">
     <span class="canvas-title">{{ $c.canvasTitle | default "Compromise canvas" }}</span>
-    <span class="canvas-meta">{{ len $cards }} nodes · {{ len $c.diagram.edges }} edges</span>
+    <span class="canvas-meta">{{ len $cards }} node{{ if ne (len $cards) 1 }}s{{ end }} · {{ len $c.diagram.edges }} edge{{ if ne (len $c.diagram.edges) 1 }}s{{ end }}</span>
     <span class="canvas-tools">
       <button type="button" class="cv-btn" data-cv="out" aria-label="Zoom out">−</button>
       <button type="button" class="cv-btn" data-cv="in" aria-label="Zoom in">+</button>
@@ -115,6 +117,9 @@
             {{- $c1 := add $sy (cond (gt $dy 0) 70 -70) }}{{- $c2 := sub $ty (cond (gt $dy 0) 70 -70) }}
         <path class="cv-edge tac-{{ $tac }}" marker-end="url(#{{ $uid }}-ah)"
               d="M{{ int $sx }},{{ int $sy }} C{{ int $sx }},{{ int $c1 }} {{ int $tx }},{{ int $c2 }} {{ int $tx }},{{ int $ty }}"/>
+            {{- if $showEdgeLabels }}{{ with .data }}{{ with .label }}
+        <text x="{{ int (add $sx 14) }}" y="{{ int (div (add $sy $ty) 2) }}" class="cv-edge-label tac-{{ $tac }}">{{ . }}</text>
+            {{- end }}{{ end }}{{ end }}
           {{- else }}
             {{- $sx := cond (gt $dx 0) (add $s.x $CW) $s.x }}{{- $sy := add $s.y (div $CH 2) }}
             {{- $tx := cond (gt $dx 0) $t.x (add $t.x $CW) }}{{- $ty := add $t.y (div $CH 2) }}
@@ -125,6 +130,10 @@
               d="M{{ int $sx }},{{ int $sy }} C{{ int $c1 }},{{ int $sy }} {{ int $c2 }},{{ int $ty }} {{ int $tx }},{{ int $ty }}">
           {{- with .data }}{{ with .description }}<title>{{ . }}</title>{{ end }}{{ end -}}
         </path>
+            {{- if $showEdgeLabels }}{{ with .data }}{{ with .label }}
+        <text x="{{ int (div (add $sx $tx) 2) }}" y="{{ int (sub (div (add $sy $ty) 2) 12) }}"
+              class="cv-edge-label tac-{{ $tac }}" text-anchor="middle">{{ . }}</text>
+            {{- end }}{{ end }}{{ end }}
           {{- end }}
         {{- end }}
       {{- end }}
@@ -136,7 +145,8 @@
         {{- $d := .data }}
         {{- $crit := lower ($d.criticality | default "medium") }}
         {{- $lbl := $d.label | default .id }}
-        {{- $short := cond (gt (len $lbl) 30) (printf "%s…" (substr $lbl 0 29)) $lbl }}
+        {{- /* 280px card at 19px monospace fits ~20 chars before it overruns the card edge */ -}}
+        {{- $short := cond (gt (len $lbl) 21) (printf "%s…" (substr $lbl 0 20)) $lbl }}
       <g class="cv-node crit-{{ $crit }}{{ if $d.isCompromised }} is-compromised{{ end }}"
          transform="translate({{ .position.x }},{{ .position.y }})">
         <title>{{ $lbl }}{{ with $d.description }} — {{ . }}{{ end }}</title>
@@ -147,7 +157,7 @@
         {{- with $d.ipAddress }}<text x="22" y="94" class="cv-node-sub">{{ . }}</text>{{ end }}
         <text x="22" y="{{ int (sub $CH 24) }}" class="cv-node-crit">{{ $d.criticality | default "" }}</text>
         {{- if $d.actions }}
-        <text x="{{ int (sub $CW 22) }}" y="{{ int (sub $CH 24) }}" class="cv-node-steps" text-anchor="end">{{ len $d.actions }} steps</text>
+        <text x="{{ int (sub $CW 22) }}" y="{{ int (sub $CH 24) }}" class="cv-node-steps" text-anchor="end">{{ len $d.actions }} step{{ if ne (len $d.actions) 1 }}s{{ end }}</text>
         {{- end }}
         {{- if $d.isCompromised }}<circle cx="{{ int (sub $CW 24) }}" cy="34" r="6" class="cv-dot"/>{{ end }}
       </g>
