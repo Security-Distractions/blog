@@ -205,12 +205,13 @@
     {
       "type": "SHA256",
       "value": "39c69cb0f29f8e9f41fa305cb1adf34762e5d8131ae348553b089377236c4f38",
-      "note": "sample"
+      "note": "the sample"
     },
     {
       "type": "SHA256",
       "value": "0f41af982ffa0570df698cf1f4227f8e5c5ee47820dc48bd647e077d611e8954",
-      "note": "component"
+      "note": "wczt-win-8.1.65-x64).exe",
+      "path": "C:\\Users\\analyst\\Downloads\\Sample E\\wczt-win-8.1.65-x64).exe"
     },
     {
       "type": "Domain",
@@ -229,7 +230,7 @@
       "value": "xjsjkjdsjjd.s3.ap-southeast-1.amazonaws.com"
     }
   ],
-  "host": "secdis",
+  "host": "analysis-host",
   "first": "2026-08-08T18:07:44.048Z",
   "last": "2026-08-08T18:17:17.636Z",
   "canvas": null,

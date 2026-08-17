@@ -34,7 +34,7 @@ scroll to zoom.
 
 ## Summary
 
-A PyInstaller-packaged, **PyArmor-obfuscated Python loader** was detonated on `SECDIS` (192.168.2.2) at **10:22:48 UTC on 2026-08-17**. It extracted its obfuscated payload to `%TEMP%\_MEI*`, used **WMIC** to add Microsoft Defender exclusions for its own download directory and a `C:\Users\Public` staging path, then **exited cleanly without retrieving a second stage, establishing persistence, or contacting any C2**.
+A PyInstaller-packaged, **PyArmor-obfuscated Python loader** was detonated on `analysis-host` at **10:22:48 UTC on 2026-08-17**. It extracted its obfuscated payload to `%TEMP%\_MEI*`, used **WMIC** to add Microsoft Defender exclusions for its own download directory and a `C:\Users\Public` staging path, then **exited cleanly without retrieving a second stage, establishing persistence, or contacting any C2**.
 
 Sample: `d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1` (MalwareBazaar; ships in the wild as `composer.php.exe`, imitating a Composer artefact so a developer double-clicking it believes they are opening a PHP file).
 
@@ -111,10 +111,10 @@ No network indicators - none were observed.
 
 ## Lab findings raised by this investigation
 
-1. **Squid proxy logs were unqueryable.** The pfsense integration JSON-decodes the relayed access log into a nested `squid` object but never maps it to ECS, leaving `source.ip`, `url.*`, `http.*` and `user_agent.*` empty, so egress was invisible to queries and detection rules. Fixed during this investigation with a `logs-pfsense.log@custom` ingest pipeline, chosen because version-pinned managed pipelines are replaced on package upgrade. Applies to new documents only; historical squid records remain nested.
+1. **Squid proxy logs were unqueryable.** The the firewall integration JSON-decodes the relayed access log into a nested `squid` object but never maps it to ECS, leaving `source.ip`, `url.*`, `http.*` and `user_agent.*` empty, so egress was invisible to queries and detection rules. Fixed during this investigation with a `logs-the firewall.log@custom` ingest pipeline, chosen because version-pinned managed pipelines are replaced on package upgrade. Applies to new documents only; historical squid records remain nested.
 2. **The WMIC rule covers only the WMIC path.** A payload using `Add-MpPreference` would not trigger it. Elastic's PowerShell-based Defender-exclusion rule should be confirmed enabled.
-3. **`/var/log/squid/access.log` is 0 bytes** - the squid integration's `filestream` inputs collect nothing. All proxy visibility arrives via syslog into `pfsense.log`.
-4. **Fleet reports the SECDIS agent as offline** (last check-in 2026-08-08) while telemetry flows normally. Data output works, Fleet check-in does not, so the agent receives no policy updates.
+3. **`/var/log/squid/access.log` is 0 bytes** - the squid integration's `filestream` inputs collect nothing. All proxy visibility arrives via syslog into `the firewall.log`.
+4. **Fleet reports the analysis-host agent as offline** (last check-in 2026-08-08) while telemetry flows normally. Data output works, Fleet check-in does not, so the agent receives no policy updates.
 
 ## Attack path diagram
 
@@ -122,7 +122,7 @@ Compromise Canvas export of the on-host attack path:
 **[`canvas/on-host-attack-path.json`](canvas/on-host-attack-path.json)** (in this directory)
 
 Download it, then in [CompromiseCanvas](https://github.com/SagaLabs/CompromiseCanvas) choose **Import
-JSON** and **double-click the `secdis` host** to walk the four steps. The full write-up is published alongside it in `cases/`.
+JSON** and **double-click the `analysis-host` host** to walk the four steps. The full write-up is published alongside it in `cases/`.
 
 (Case file attachments are disabled on this Elastic Cloud deployment — `POST /api/files/files/...`
 returns "exists but is not available with the current configuration" — so canvases are versioned in
@@ -131,7 +131,7 @@ that repository rather than attached here.)
 
 ## Analyst note 1
 
-### Process tree (endpoint.events.process, SECDIS)
+### Process tree (endpoint.events.process, analysis-host)
 
 ```
 explorer.exe

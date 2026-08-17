@@ -15,15 +15,15 @@ The detonation host sits on an isolated segment. All of its egress is forced thr
 Squid proxy on the firewall — it has no route to the internet of its own.
 
 ```text
-secdis                OPNsense (192.168.2.1)             Internet
-  │                          │                              │
-  ├── TCP :3128 ────────────►│                              │
-  │   [Defend + Sysmon       ├── HTTP CONNECT ─────────────►│
-  │    see this hop]         │   [only the proxy sees this] │
+analysis host              perimeter firewall              Internet
+  │                          │                                 │
+  ├── TCP :3128 ────────────►│                                 │
+  │   [Defend + Sysmon       ├── HTTP CONNECT ────────────────►│
+  │    see this hop]         │   [only the proxy sees this]    │
 ```
 
-When malware on `secdis` beacons out, the endpoint agent faithfully records a network
-connection. To `192.168.2.1:3128`. Every single time, regardless of where the traffic
+When malware on `analysis-host` beacons out, the endpoint agent faithfully records a network
+connection. To the proxy. Every single time, regardless of where the traffic
 is really going.
 
 > The endpoint isn't wrong. It is reporting exactly what the host did — open a socket to
@@ -48,8 +48,8 @@ Squid was shipping. The documents were arriving in Elasticsearch. They were simp
 this proxy emits ECS-JSON:
 
 ```text
-logformat opnsense {ECS-JSON...}
-access_log syslog:local4.info opnsense
+logformat ecsjson {ECS-JSON...}
+access_log syslog:local4.info ecsjson
 ```
 
 A `grok` processor met JSON, failed, and dropped the document into the index with its
@@ -67,7 +67,7 @@ Decode the JSON instead of grokking it:
     "add_to_root": true,
     "add_to_root_conflict_strategy": "replace",
     "ignore_failure": true,
-    "tag": "json_decode_opnsense_squid_ecs"
+    "tag": "json_decode_squid_ecs"
   }
 }
 ```
@@ -76,7 +76,7 @@ Decode the JSON instead of grokking it:
 
 ```bash
 curl -u "$ES_USER:$ES_PASS" \
-  "$ES/logs-pfsense.log-*/_count" \
+  "$ES/logs-the firewall.log-*/_count" \
   -H 'Content-Type: application/json' \
   -d '{"query":{"exists":{"field":"squid.url.original"}}}'
 ```

@@ -25,7 +25,7 @@ would have stolen, and a write-up that implies otherwise is guessing.
 > quoted below because it is what the telemetry recorded — the staging directory really was
 > named that, and renaming it here would misreport the evidence.
 
-**Host:** `secdis` (192.168.2.2) · **User:** `analyst` · **Detonated:** 2026-08-08 16:59 UTC · **Alert window:** 17:00:00–17:02:15 · **Detections:** 31 Elastic Defend alerts · **Telemetry:** healthy (Defend events + Sysmon logging with correct timestamps — full reconstruction available)
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 16:59 UTC · **Alert window:** 17:00:00–17:02:15 · **Detections:** 31 Elastic Defend alerts · **Telemetry:** healthy (Defend events + Sysmon logging with correct timestamps — full reconstruction available)
 
 ---
 

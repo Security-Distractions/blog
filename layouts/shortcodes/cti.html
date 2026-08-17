@@ -45,9 +45,12 @@
   <div class="cti-iocs">
     <span class="cti-iocs-title">Indicators</span>
     <ul>
+      {{- /* every indicator carries what it actually is; anything that could not be
+             identified from the feeds, the alerts or the analysis is not listed at all */ -}}
       {{- range . }}
       <li><span class="ioc-type">{{ .type }}</span> <code>{{ .value }}</code>
-        {{- with .note }} <span class="ioc-note">({{ . }})</span>{{ end }}</li>
+        {{- with .note }} <span class="ioc-note">— {{ . }}</span>{{ end }}
+        {{- with .path }}<br><span class="ioc-path">{{ . }}</span>{{ end }}</li>
       {{- end }}
     </ul>
   </div>

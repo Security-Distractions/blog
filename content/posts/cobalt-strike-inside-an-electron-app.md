@@ -22,7 +22,7 @@ timeline analysis, and a beacon.
 > quoted below because it is what the telemetry recorded — the staging directory really was
 > named that, and renaming it here would misreport the evidence.
 
-**Host:** `secdis` (192.168.2.2) · **User:** `analyst` · **Detonated:** 2026-08-08 18:07:15 UTC · **Alert window:** 18:07:44–18:12:15 · **Detections:** 93 alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 18:07:15 UTC · **Alert window:** 18:07:44–18:12:15 · **Detections:** 93 alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
 
 ---
 

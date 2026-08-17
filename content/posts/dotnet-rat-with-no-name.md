@@ -24,7 +24,7 @@ would be worse than leaving the field empty.
 > quoted below because it is what the telemetry recorded — the staging directory really was
 > named that, and renaming it here would misreport the evidence.
 
-**Host:** `secdis` (192.168.2.2) · **User:** `analyst` · **Detonated:** 2026-08-08 17:47:10 UTC · **Alert window:** 17:47:28–17:51:59 · **Detections:** 25 Elastic Defend alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 17:47:10 UTC · **Alert window:** 17:47:28–17:51:59 · **Detections:** 25 Elastic Defend alerts · **Family/attribution:** _left for analyst to determine from the IOCs below_
 
 ---
 
@@ -43,7 +43,7 @@ The .NET RAT is a **.NET remote-access trojan (RAT)** with **keylogging**. It se
 - **Keystroke capture** — "Keystrokes Input Capture from a Managed Application" ×2 (T1056.001).
 
 ## Layer 4: Command & Control
-- C2 attempted **via the system proxy `192.168.2.1:3128`**; **no external egress observed** (dead/sinkholed in the isolated lab) — no external C2 IP/domain captured this run.
+- C2 attempted **via the system proxy the proxy**; **no external egress observed** (dead/sinkholed in the isolated lab) — no external C2 IP/domain captured this run.
 - 2× "Malicious Reputation of Executable Download" (component matched a bad-reputation indicator — T1105).
 
 ## The alerts

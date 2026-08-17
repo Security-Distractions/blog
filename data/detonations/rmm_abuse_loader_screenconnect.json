@@ -88,19 +88,20 @@
     {
       "type": "SHA256",
       "value": "12833af0f0d1c3c193cf0aeadb7c2dbb3b6b9f4a600e65b43e3997fcd6621e88",
-      "note": "sample"
+      "note": "the sample"
     },
     {
       "type": "SHA256",
       "value": "4f8f750ffdd2a5df67946fdd29d4bb7a2d9b88d8495f9980d99f03e053f3b0a0",
-      "note": "component"
+      "note": "9yxt0.exe",
+      "path": "C:\\ProgramData\\Microsoft\\Windows\\9yxt0.exe"
     },
     {
       "type": "IP",
       "value": "198.23.185.237:8041"
     }
   ],
-  "host": "secdis",
+  "host": "analysis-host",
   "first": "2026-08-08T15:59:08.427Z",
   "last": "2026-08-08T16:31:39.925Z",
   "canvas": null,

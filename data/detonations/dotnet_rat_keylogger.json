@@ -135,10 +135,10 @@
     {
       "type": "SHA256",
       "value": "bc033453ae6a4965aac275ec154517bb55c428149ef4107951246ecf17e48674",
-      "note": "sample"
+      "note": "the sample"
     }
   ],
-  "host": "secdis",
+  "host": "analysis-host",
   "first": "2026-08-08T17:47:28.428Z",
   "last": "2026-08-08T18:00:44.740Z",
   "canvas": null,

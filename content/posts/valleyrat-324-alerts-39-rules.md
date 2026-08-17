@@ -35,7 +35,7 @@ Collapsed to the eight steps that matter, the same path reads like this.
 > quoted below because it is what the telemetry recorded — the staging directory really was
 > named that, and renaming it here would misreport the evidence.
 
-**Host:** `secdis` (192.168.2.2) · **User:** `analyst` · **Detonated:** 2026-08-08 17:27:55 UTC · **Alert window:** 17:28:17–17:34:53 · **Detections:** 319 Elastic Defend/SIEM alerts · **Telemetry:** healthy (clock correct; Aug-6 backlog from an earlier snapshot filtered out)
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 17:27:55 UTC · **Alert window:** 17:28:17–17:34:53 · **Detections:** 319 Elastic Defend/SIEM alerts · **Telemetry:** healthy (clock correct; Aug-6 backlog from an earlier snapshot filtered out)
 
 ---
 

@@ -22,7 +22,7 @@ true* being different is the whole lesson.
 > quoted below because it is what the telemetry recorded — the staging directory really was
 > named that, and renaming it here would misreport the evidence.
 
-**Host:** `secdis` (192.168.2.2) · **User:** `analyst` · **Detonated:** 2026-08-08 15:59 UTC · **Status:** terminated (no activity after 16:27) · **Detections:** 76 Elastic Defend alerts
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 15:59 UTC · **Status:** terminated (no activity after 16:27) · **Detections:** 76 Elastic Defend alerts
 
 ---
 
@@ -51,11 +51,11 @@ The ScreenConnect RMM loader is a **PyInstaller-packaged Python dropper** that i
 - **PowerShell script-block logging disabled.**
 
 ## Layer 5: Command & Control / Network
-- **`198.23.185.237:8041`** — ScreenConnect relay (port 8041 = ScreenConnect default), egress confirmed from victim in OPNsense firewall logs.
+- **`198.23.185.237:8041`** — ScreenConnect relay (port 8041 = ScreenConnect default), egress confirmed from victim in the firewall firewall logs.
 - Excluded: `172.211.123.249:443` — evaluated and found to be legitimate Azure/Microsoft traffic (svchost/msedge), NOT C2.
 
 ## Visibility Gap (finding)
-Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon) is **absent for the detonation window 15:59–16:27**; both resumed at **16:27:20** with `elastic_agent` "failed to index document" errors. Elastic Defend **alerts** (fast path) were unaffected — this reconstruction is alert-derived. Recommend investigating the secdis agent event-shipping interruption (possible malware interference with logging vs. an ingest/mapping failure).
+Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon) is **absent for the detonation window 15:59–16:27**; both resumed at **16:27:20** with `elastic_agent` "failed to index document" errors. Elastic Defend **alerts** (fast path) were unaffected — this reconstruction is alert-derived. Recommend investigating the analysis-host agent event-shipping interruption (possible malware interference with logging vs. an ingest/mapping failure).
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "slug": "pyarmor-pyinstaller-loader",
   "folder": "2026-08-17-pyarmor-pyinstaller-loader",
-  "title": "PyArmor-obfuscated PyInstaller loader \u2014 Defender exclusion abuse via WMIC (SECDIS, 2026-08-17)",
+  "title": "PyArmor-obfuscated PyInstaller loader \u2014 Defender exclusion abuse via WMIC (analysis-host, 2026-08-17)",
   "date": "2026-08-17",
   "case_id": "fead879c-64db-4b55-ae10-922c4e3a143c",
   "family": null,
@@ -189,10 +189,10 @@
     {
       "type": "SHA256",
       "value": "d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1",
-      "note": "sample"
+      "note": "the sample"
     }
   ],
-  "host": "secdis",
+  "host": "analysis-host",
   "first": "2026-08-17T10:23:34.831Z",
   "last": "2026-08-17T10:35:59.125Z",
   "canvas": "2026-08-17-pyarmor-pyinstaller-loader",
