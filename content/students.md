@@ -1,5 +1,6 @@
 ---
 title: "Student resources"
+draft: true
 summary: "Everything you need for the course in one place — the lab tooling and the public sample sources."
 date: 2026-08-11
 hidemeta: true
