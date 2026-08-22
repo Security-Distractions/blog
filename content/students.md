@@ -1,6 +1,6 @@
 ---
 title: "Student resources"
-summary: "Everything you need for the course in one place — the lab tooling, the intel platform, and the public sample sources."
+summary: "Everything you need for the course in one place — the lab tooling and the public sample sources."
 date: 2026-08-11
 hidemeta: true
 ShowToc: false
@@ -18,10 +18,6 @@ Bookmark this page. Anything you need during the course is linked here.
 {{< linkcard title="Elastic Security" accent="cyan" tag="Login required"
     url="https://david-clayton.kb.europe-west4.gcp.elastic-cloud.com"
     desc="Kibana for the lab. Alerts, detection rules, and the raw endpoint and proxy telemetry." >}}
-
-{{< linkcard title="CTI Agent" accent="emerald" tag="Login required"
-    url="https://cti-agent.securitydistractions.com/"
-    desc="Our threat-intel workbench: collected reporting, extracted indicators, and recommendations." >}}
 
 </div>
 

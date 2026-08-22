@@ -23,8 +23,8 @@
     </div>
     {{- with site.Params.cta }}
     {{- if .url }}
-    {{- /* Call-to-action for the CTI Agent. rel=nofollow keeps crawlers from
-           indexing the app itself; the blog is public and indexed. */}}
+    {{- /* Optional call-to-action, driven entirely by [params.cta]. None is set, so
+           nothing renders. rel=nofollow keeps crawlers off whatever it points at. */}}
     <div class="home-cta">
         <a class="cta-button" href="{{ .url }}" rel="noopener nofollow">
             {{ with .icon }}<span class="cta-icon" aria-hidden="true">{{ . }}</span>{{ end }}
