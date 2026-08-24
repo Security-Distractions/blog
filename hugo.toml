@@ -42,7 +42,12 @@ pygmentsUseClasses = true
 
   [params.assets]
     disableHLJS = true
+    # Generated from the logo by tools/favicon/. PaperMod would default to these same paths,
+    # but naming them keeps the set discoverable.
     favicon = "/favicon.ico"
+    favicon16x16 = "/favicon-16x16.png"
+    favicon32x32 = "/favicon-32x32.png"
+    apple_touch_icon = "/apple-touch-icon.png"
 
 [markup]
   [markup.highlight]
