@@ -143,7 +143,7 @@
     {
       "time": "2026-10-27T21:20:59.4158534Z",
       "event": "Dropper exits",
-      "detail": "114 ms after spawning the container, leaving the payload running inside a trusted Microsoft binary",
+      "detail": "Exits immediately after spawning the container, leaving the payload running inside a trusted Microsoft binary",
       "tactic": "Defense Evasion",
       "mitre": "T1055.012",
       "source": "process"
@@ -151,7 +151,7 @@
     {
       "time": "2026-10-27T21:20:59.5053864Z",
       "event": "WMI client stack loaded",
-      "detail": "wmiutils.dll, wbemcomn.dll, wbemprox.dll, WMINet_Utils.dll, wbemsvc.dll and fastprox.dll loaded into RegSvcs.exe within 150 ms",
+      "detail": "wmiutils.dll, wbemcomn.dll, wbemprox.dll, WMINet_Utils.dll, wbemsvc.dll and fastprox.dll loaded into RegSvcs.exe",
       "tactic": "Discovery",
       "mitre": "T1082",
       "source": "process"
@@ -167,7 +167,7 @@
     {
       "time": "2026-10-27T21:21:02.1831623Z",
       "event": "Chrome and Edge credential stores opened",
-      "detail": "Login Data read from both browser profiles, 18 ms apart",
+      "detail": "Login Data read from both browser profiles, back to back",
       "tactic": "Credential Access",
       "mitre": "T1555.003",
       "source": "process"
@@ -191,11 +191,11 @@
     {
       "time": "2026-10-27T21:22:42.1162197Z",
       "event": "Socket closed",
-      "detail": "After roughly 100 seconds. No persistence was established and no further sample activity appears in the window",
+      "detail": "No persistence was established and no further sample activity appears in the window",
       "tactic": "",
       "mitre": "",
       "source": "process"
     }
   ],
-  "attribution_source": "Family attribution from a Recorded Future intelligence card, matched by exact SHA256 (master ID `hd4fiZ`, risk 65/99, rule *Positive Malware Verdict*), and corroborated independently by an Elastic Defend memory-scan signature on the running process. Two methods on two different artefacts."
+  "attribution_source": "Family attribution from a sandbox detonation matched by exact SHA256 (score 10, 14 signatures, detection `Agent Tesla`), corroborated independently by an Elastic Defend memory-scan signature read from the running process. Two methods on two different artefacts."
 }

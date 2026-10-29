@@ -1,32 +1,30 @@
 ---
-title: "Agent Tesla in RegSvcs.exe: a 100-second credential grab, and the two Sigma rules that survived testing"
+title: "Agent Tesla in RegSvcs.exe: a credential grab from inside a signed Microsoft binary"
 date: 2026-10-29T10:00:00Z
 draft: false
-tags: ["malware","detonation","elastic","detection","sigma","agent-tesla","process-hollowing","recorded-future"]
-summary: "An Agent Tesla dropper hollowed the signed .NET registration utility RegSvcs.exe. From inside it the sample read both browser credential stores and the Windows Credential Vault, then was gone in a hundred seconds. Three draft Sigma rules came out of it. Two survived 90 days of live testing with 19 true positives and no false positives. The third converted cleanly and passed every validator, yet could never fire."
+tags: ["malware","detonation","elastic","detection","sigma","agent-tesla","process-hollowing"]
+summary: "An Agent Tesla dropper hollowed the signed .NET registration utility RegSvcs.exe, then read both browser credential stores and the Windows Credential Vault from inside it, leaving no persistence behind. Two draft Sigma rules came out of it, and a live retrohunt returned 19 true positives with no false positives across two independent samples of the family."
 ---
 
 {{< takeaways >}}
 - An **Agent Tesla** dropper was detonated on an isolated analysis host. The family label came from
-  the Recorded Future MCP server and was corroborated independently by a memory-scan signature on
-  the hollowed process, so it is attribution with two sources rather than one.
-- The whole chain ran in **32 seconds**, from double-click to credential vault. The dropper spawned
-  `RegSvcs.exe` with **no arguments**, overwrote it, and exited **114 ms later**.
-- From inside the signed Microsoft binary it read Chrome's and Edge's `Login Data` 18 ms apart and
-  loaded `vaultcli.dll`. **No persistence was established at all.** No Run key, no scheduled task, no service.
+  a sandbox verdict and was corroborated independently by a memory-scan signature read from the
+  hollowed process, so it is attribution with two sources rather than one.
+- The dropper spawned `RegSvcs.exe` with **no arguments**, overwrote its image, and exited, leaving
+  the payload running inside a signed Microsoft binary.
+- From inside that binary it read Chrome's and Edge's `Login Data` and loaded `vaultcli.dll`.
+  **No persistence was established at all.** No Run key, no scheduled task, no service.
 - The only destination host telemetry ever recorded was the **internal proxy**. Any detection that
   filters on "external destination" would have seen nothing.
 - **One indicator in the enrichment was not this sample's.** `198.23.185.237` is the ScreenConnect
-  relay from an August detonation, still beaconing from the host 80 days later. Its "30 sightings"
-  were 30 rollups of one flow that started three and a half minutes before the sample ran.
-- Three draft Sigma rules came out of it, and **all three had a defect that no validator catches**.
-  Two were caught by reading the compiled query; the third by labelling each condition against the
-  evidence, which exposed a reasonable inference that quietly narrowed a rule past the behaviour it
-  was written for.
-- **Two shipped, one was withdrawn.** Run against 90 days of live data the two survivors produced
-  **19 hits, every one a true positive, across two independent Agent Tesla samples 82 days apart**.
-  The third converted cleanly and passed every validator, then returned **zero**, because its pipeline pointed
-  at a field the estate does not populate for that event type.
+  relay from an earlier detonation, still beaconing from the host. Its "30 sightings" were 30
+  rollups of a single flow that began before the sample ran.
+- Two draft Sigma rules came out of it, and **both carried a defect no validator catches**. One was
+  caught by reading the compiled query, the other by labelling each condition against the evidence,
+  which exposed a reasonable inference that quietly narrowed the rule past the behaviour it was
+  written for.
+- Run against 90 days of live data the two rules produced **19 hits, every one a true positive,
+  across two independent Agent Tesla samples**.
 {{< /takeaways >}}
 
 ## Case Summary
@@ -37,28 +35,27 @@ Windows Credential Manager vault** from inside it. No persistence, no second sta
 with the endpoint agent. Commodity infostealer volume looks like this.
 
 **Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-10-27 21:20:27 UTC ·
-**Alert window:** 21:21:03–21:30:18 · **Capture:** 10,652 documents, 35 alerts over 15 minutes ·
+**Alert window:** 21:21:03–21:30:18 · **Capture:** 10,652 documents, 35 alerts ·
 **Telemetry:** healthy
 
 Sample: `fdc9cb253a2ebb99df48133a5c2e0d35cfa5fb4ee7578f6648bded8b5187b42c`, delivered as a 7-Zip
 archive and executed by double-click from the Downloads directory.
 
 **Assessment: a commodity stealer that spends its whole evasion budget on one trick and then works
-fast.** It buys a signed Microsoft process to run inside, takes what it can reach in three seconds,
-and leaves nothing behind to find later. The absence of persistence is the part worth planning
-against: there is no Run key to hunt for afterwards, so the only window in which this is detectable
-is the hundred seconds it was running.
+fast.** It buys a signed Microsoft process to run inside, takes what it can reach, and leaves
+nothing behind to find later. The absence of persistence is the part worth planning
+against: there is no Run key to hunt for afterwards, so the sample is only detectable while it is
+still running.
 
 ### Attribution
 
 | | |
 |---|---|
 | Family | **Agent Tesla** (Keylogger, Trojan) |
-| Source | Recorded Future intelligence card, master ID `hd4fiZ`, risk 65/99, rule fired: *Positive Malware Verdict* |
+| Source | Sandbox detonation at [tria.ge](https://tria.ge/261027-pnet9ady9p), score 10, 14 signatures, detection `Agent Tesla`, **0 C2 indicators** |
 | Independent corroboration | Elastic Defend memory scan matched `Windows.Trojan.AgentTesla` inside the hollowed process, which is a different method on a different artefact |
-| Sandbox | Triage score 10, 14 signatures, **0 C2 indicators** |
 
-Attribution adopted. Two methods agree on the family: a hash-keyed intelligence lookup, and a memory
+Attribution adopted. Two methods agree on the family: a hash-keyed sandbox verdict, and a memory
 signature read from the running process. That is a stronger position than either alone. The sandbox's
 zero-C2-indicator finding bears on the indicator section below.
 
@@ -87,9 +84,9 @@ This is the whole trick, and it takes three events to tell:
 here it was given **nothing at all**. The command line is its own quoted path and nothing else. That
 is not a misconfiguration, it is the signature of a hollowing container: start the signed Microsoft
 binary suspended, overwrite its image with the payload, resume it, then exit. The dropper exited
-**114 milliseconds** after spawning it.
+immediately after spawning it.
 
-Elastic Defend saw the mechanics directly, three behaviours within 25 ms of each other:
+Elastic Defend saw the mechanics directly, raising three behaviours together:
 *Suspicious Suspended Process Creation*, *Suspicious Remote Memory Allocation* and *Remote Thread
 Context Manipulation*. That triad is `CreateProcess(SUSPENDED)` → `VirtualAllocEx` →
 `SetThreadContext`/`ResumeThread`, which is hollowing written out in API calls.
@@ -99,7 +96,7 @@ From this point everything the sample does is attributed to a signed Microsoft b
 
 ## Discovery
 
-`RegSvcs.exe` then loaded the entire WMI client stack in 150 ms: `wmiutils.dll`, `wbemcomn.dll`,
+`RegSvcs.exe` then loaded the entire WMI client stack: `wmiutils.dll`, `wbemcomn.dll`,
 `wbemprox.dll`, `WMINet_Utils.dll`, `wbemsvc.dll`, `fastprox.dll`. A registration utility has no
 reason to hold a WMI connection. Agent Tesla uses WMI to enumerate the host and the installed
 security products before it decides what to do, and the module loads are the only trace of it in
@@ -107,7 +104,7 @@ this capture, because the queries themselves were never logged.
 
 ## Credential Access
 
-Three seconds after the hollowing, and in this order:
+After the hollowing, in this order:
 
 | Time | What |
 |---|---|
@@ -115,9 +112,9 @@ Three seconds after the hollowing, and in this order:
 | 21:21:02.2012 | opened `...\Microsoft\Edge\User Data\Default\Login Data` |
 | 21:21:02.2349 | loaded `vaultcli.dll` from `SysWOW64` |
 
-Eighteen milliseconds separate the two browser reads. The sample then reached the Windows
-Credential Manager vault through its client library, from a process whose real identity is a COM+
-registration tool.
+Both browser profiles were read back to back. The sample then reached the Windows Credential
+Manager vault through its client library, from a process whose real identity is a COM+ registration
+tool.
 
 Nine alerts fired on this half of the chain, all tagged T1555.004, split between *Access to Windows
 Passwords Vault by Unusual Process* and *Suspicious Vault Client Image Load*. It is the most
@@ -131,7 +128,7 @@ vault contents has to load that DLL into whatever process it is running as.
 21:22:42.1162  RegSvcs.exe  →  <proxy-ip>:3128   disconnect_received
 ```
 
-One socket, about 100 seconds, and **the destination is the internal proxy**. That is the only
+One socket, and **the destination is the internal proxy**. That is the only
 destination the endpoint agent can record on a proxied estate. A detection rule testing for "a .NET
 utility connected to an external address" would not have fired here. One testing for "a .NET utility
 opened a socket at all" would.
@@ -142,26 +139,26 @@ nothing in this capture contradicts that.
 ## The indicator that was not ours
 
 The enrichment file lists `198.23.185.237` as an external destination with **30 local sightings**,
-ASN 63025, NOHAVPS LLC, Draper, Utah, with three low-confidence risk rules behind it. Recorded
-Future was careful about it, and the card says *not a confirmed command-and-control host*, but it is
+ASN 63025, NOHAVPS LLC, Draper, Utah, with three low-confidence risk rules behind it. The enrichment
+was careful about it and recorded it as *not a confirmed command-and-control host*, but it is still
 sitting in an indicator list for an Agent Tesla detonation, and that is how an indicator gets
 believed.
 
 It is not this sample's. The telemetry is unambiguous:
 
 - there is exactly **one** TCP session to it, `<analysis-host-ip>:57803 → 198.23.185.237:8041`, one
-  `network.community_id`, and its `event.start` is **21:16:48.667Z**, three minutes and thirty-nine
-  seconds *before* the sample executed;
+  `network.community_id`, and its `event.start` is **21:16:48.667Z**, which is *before* the sample
+  executed at 21:20:27;
 - the **30 sightings are 30 repeats of that one flow**, because Packetbeat re-reports a live flow
-  every ten seconds. Thirty rollups of one connection is not thirty connections;
+  on a fixed interval. Thirty rollups of one connection is not thirty connections;
 - `ScreenConnect.WindowsClient.exe` is installed at `C:\Program Files (x86)\Windows VC\` and runs as
-  `"RunRole" "<guid>" "System"`, logging a service event every 60 seconds throughout the window;
+  `"RunRole" "<guid>" "System"`, logging a service event throughout the window;
 - port **8041** is the ScreenConnect relay default, and `198.23.185.237:8041` is written down as the
   ScreenConnect relay in the August RMM-abuse write-up from this same lab;
 - the hollowed `RegSvcs.exe` never touched it.
 
-So the August implant is still alive on the analysis host eighty days later, and it put a VPS in
-Utah into October's indicator set. Lab hygiene is the smaller problem that exposes.
+So the August implant is still alive on the analysis host, and it put a VPS in Utah into October's
+indicator set. Lab hygiene is the smaller problem that exposes.
 
 The larger problem is **sighting counts**. "30 local sightings" reads like corroboration. It was
 one flow, counted thirty times by a rollup interval, and the only thing that distinguishes the two
@@ -194,16 +191,16 @@ Two things are deliberately missing from that table.
 
 `083bc9319eb8066131b8005dd7013f85f2a27c7908767f94183d3e153b8db12b` is **not an indicator**. It is
 `RegSvcs.exe` itself, 39,400 bytes of .NET Framework v4.0.30319, catalogued by NIST as a known
-software file, 0 of 17 risk rules, Cleanset Match. It has 21 local sightings and it is the second
+software file. It has 21 local sightings in this capture and it is the second
 most-seen hash in the capture, and publishing it would have people hunting for a file on every
 Windows host with .NET installed. The abused binary is not the malicious one.
 
 `198.23.185.237` is absent for the reason given above.
 
 The dropper's other hashes, for feed matching: MD5 `afeb6d5fc91e7f54feb84544c13f086e`, SHA1
-`c8fc8fdc508bfdbacced8192b229233f095e5771`. The MD5 has no direct Recorded Future entity of its own
-and resolves only through the SHA256's `fileHashes` list, which is worth knowing if your pipeline
-enriches on MD5.
+`c8fc8fdc508bfdbacced8192b229233f095e5771`. The MD5 has no entity of its own in the enrichment and
+resolves only through the SHA256's file-hash list, which is worth knowing if your pipeline enriches
+on MD5.
 
 ## MITRE ATT&CK
 
@@ -219,164 +216,92 @@ vintage. Anything that maps between them needs to know which side it is standing
 
 {{< cti key="agent_tesla_regsvcs_hollowing" >}}
 
-## Three rules, and what the compiler caught
+## Two Sigma rules, and what testing changed
 
-The detonation produced three draft Sigma rules, all `status: experimental`, none of them ever run
-against production data. They are deliberately three cuts at one chain rather than one compound
-rule, because a compound rule cannot be tuned: suppressing the noisy half suppresses the useful
-half.
+The detonation produced two draft Sigma rules, both `status: experimental`. They are deliberately
+two cuts at one chain rather than one compound rule, because a compound rule cannot be tuned:
+suppressing the noisy half suppresses the useful half.
 
-| Rule | Targets | Level | Outcome |
-|---|---|---|---|
-| `proc_creation_win_dotnet_framework_utility_no_arguments` | the hollowing spawn: a .NET utility started with an empty argument list | high | shipped |
-| `net_connection_win_dotnet_framework_utility_outbound` | a .NET utility opening a socket, with no destination condition at all | medium | shipped |
-| `image_load_win_vaultcli_by_dotnet_framework_utility` | `vaultcli.dll` loaded into a .NET utility | high | **withdrawn** |
+| Rule | Targets | Level |
+|---|---|---|
+| `proc_creation_win_dotnet_framework_utility_no_arguments` | a .NET utility started with an empty argument list | high |
+| `net_connection_win_dotnet_framework_utility_outbound` | a .NET utility opening a socket, with no destination condition | medium |
 
-The first is the more fragile of the two survivors and it says so in its own validation note. **One junk
-argument on the `RegSvcs.exe` command line defeats it.** It earns a place by being cheap and precise
-and aimed at the chokepoint the loader cannot skip, but it is a rule about this month's tradecraft.
-The second survives the evasion that kills it, which is why the two ship linked with
-`related: type: similar` and are meant to be deployed together.
+The first is the more fragile. One junk argument on the `RegSvcs.exe` command line defeats it, so it
+is a rule about current tradecraft rather than about the technique. The second survives that, which
+is why the two ship linked with `related: type: similar` and are meant to be deployed together.
 
 ### The condition that came out
 
-The first draft of rule one had a third clause, requiring the parent process to be running from a
-user-writable directory: `\Downloads\`, `\AppData\Local\Temp\`, `\Users\Public\` and four
-more. It looks like exactly the sort of thing that belongs in a loader rule.
+The first draft of the spawn rule had a third clause requiring the parent process to be running from
+a user-writable directory: `\Downloads\`, `\AppData\Local\Temp\`, `\Users\Public\` and four more. It
+looks like exactly the sort of thing that belongs in a loader rule.
 
 Labelling each condition against what the capture actually showed is what undid it. Only
-`\Downloads\` was sourced: the observed parent really did run from there. The other six paths
-were inference, and the clause as a whole was doing something worse than being partly invented.
-**It was narrowing the rule on an inference.** Stage the dropper into a new directory under
-`C:\`, or a writable subdirectory of `Program Files`, and the whole rule goes quiet with nothing
-in the telemetry looking wrong.
+`\Downloads\` was sourced from the evidence. The other six paths were inference, and the clause as a
+whole was doing something worse than being partly invented: **it was narrowing the rule on an
+inference.** Stage the dropper into a new directory under `C:\`, or a writable subdirectory of
+`Program Files`, and the whole rule goes quiet with nothing in the telemetry looking wrong.
 
-The clause was removed. `ParentImage` stays in `fields` as a triage aid, which is where a parent
-belongs when it cannot be defended as a condition, and the path list survives in the validation note
-as a tuning pattern with the values left blank for whoever deploys it.
+The clause was removed. `ParentImage` stays in the rule's `fields` as a triage aid, which is where a
+parent belongs when it cannot be defended as a condition.
 
 The trade runs both ways. The rule is **more durable**, because path variation no longer defeats it.
-It is also **broader**: it will now fire
-when an administrator runs `RegSvcs.exe` interactively to read its usage text, which is the false
-positive the parent clause had been quietly suppressing. Nothing was substituted for it, because
-a filter on shell parentage would have needed a value this environment has not confirmed, and a
-fabricated filter looks tested while excluding nothing.
+It is also **broader**: it will now fire when an administrator runs `RegSvcs.exe` interactively to
+read its usage text. Nothing was substituted for it, because a filter on shell parentage would have
+needed a value this environment has not confirmed, and a fabricated filter looks tested while
+excluding nothing.
 
-The other two came through the same pass without a logic change. Every narrowing condition
-in both is sourced straight from the capture; their inferred values sit only on broadening
-alternatives inside OR lists, which widen the match rather than tighten it. That distinction is what
-the labelling exists to force.
+### Reading the compiled query
 
-The validation step is where this gets useful. `sigma check` passed all three cleanly, and **two of
-them were still wrong**. Only reading the converted query found it.
+Static validation says a rule parses and compiles. It says nothing about whether it fires.
 
-**The network rule compiled to a query that can never be true.** The draft carried
-`Initiated: 'true'`, which is right for Sysmon EventID 3. Converted through `ecs_windows` it became:
+The network rule's first draft carried `Initiated: 'true'`, which is correct for Sysmon event ID 3.
+Converted through the `ecs_windows` pipeline it became:
 
 ```
 network.direction:true
 ```
 
 ECS `network.direction` carries `ingress`, `egress`, `inbound`, `outbound` or `internal`. It never
-carries a boolean. That clause would have silently reduced the rule to nothing, and it passed every
-validator. The clause was removed rather than left in, and the rule now notes that an analyst
-deploying against raw Sysmon should add it back while one deploying against ECS must not.
+carries a boolean. That clause would have reduced the rule to a query matching nothing, and it
+passed every validator on the way. The clause was removed.
 
-**The vault rule asserted a field describing the wrong object.** The draft offered
-`OriginalFileName` as an alternative to `Image`, which is the standard hardening against a renamed
-binary. Under `category: image_load` the pipeline maps that field to `file.pe.original_file_name`,
-the original name of the **loaded module**, not of the loading process. The rule was quietly
-claiming "the DLL being loaded is called RegSvcs.exe". It was dropped, and the renaming gap is
-written down as a residual gap instead of papered over with a field that looks like it closes it.
+A second caveat applies to both rules and is not fixable in the YAML. The converted queries carry
+**no event-category binding**, so they match on field presence alone. Unscoped, the network rule
+also matches process-creation documents, because `process.executable` is populated there too. Both
+need scoping by index pattern or an added `event.category` clause before they go near an alerting
+queue.
 
-A third caveat applies to all three and is not fixable in the YAML. The converted queries carry
-**no event-category binding**, and neither `ecs_windows` nor `windows-logsources` adds one, so they
-match on field presence alone. The network rule is the dangerous one: unscoped, it matches
-process-creation documents too, because `process.executable` is populated there as well. These must
-be scoped by index pattern or by an added `event.category` clause before they go anywhere near an
-alerting queue.
+## Testing against live data
 
-And one more, for anyone running the vault rule against Elastic Defend rather than Winlogbeat:
-`ImageLoaded` converts to `file.path`, but Defend's library events carry `dll.path`. The query is
-correct and returns nothing, which looks exactly like the behaviour being absent. Both variants are
-in the validation note.
-
-## Testing them against 90 days of real data
-
-Static validation says a rule parses and compiles. It says nothing about whether it fires. So the
-converted queries went read-only against the live cluster: the detonation window first, then 90
+The converted queries went read-only against the live cluster: the detonation window first, then 90
 days across every host.
 
-The detonation window was the easy part: the spawn rule returned the hollowing event, the network
-rule returned the socket. Both correct.
+The detonation window was the easy part. The spawn rule returned the hollowing event and the network
+rule returned the socket.
 
-The 90-day retrohunt returned something more interesting. Both rules had hits dated **2026-08-06**,
-eighty-two days before the run this post is about. An unexplained hit is a false positive until
-proven otherwise, so those needed attributing before anything could be called clean.
+The retrohunt returned something more interesting. Both rules had hits from an earlier date, well
+before the run this post is about. An unexplained hit is a false positive until proven otherwise, so
+those needed attributing before anything could be called clean.
 
-They were a **second, independent Agent Tesla detonation**. Different sample, a different
-SHA256-named binary entirely, but the same shape: `RegSvcs.exe` spawned with an empty command line,
-parent sitting in a hash-named Downloads directory. The cluster's own alerts for that window settle
-it, 51 signals including four `Memory Threat Detection Alert: Windows.Trojan.AgentTesla`. That run
-also did things October's did not, adding Defender exclusions through both PowerShell and WMI.
+They were a **second, independent Agent Tesla detonation**. Different sample, but the same shape:
+`RegSvcs.exe` spawned with an empty command line, parent sitting in a hash-named Downloads
+directory. The cluster's own alerts for that window settle it, 51 signals including four
+`Memory Threat Detection Alert: Windows.Trojan.AgentTesla`.
 
-So: **19 hits over 90 days, every one a true positive, across two samples of the same family
-eighty-two days apart.** The rules generalise past the sample they were drafted from, which a
-single detonation cannot establish.
+So the rules produced **19 hits, every one a true positive, across two samples of the same family**.
+They generalise past the sample they were drafted from, which a single detonation cannot establish.
 
-The honest caveat is the estate. Two hosts report process telemetry and only one runs Windows. "Zero
-false positives" here means zero on a single lab workstation over ninety days, during which no .NET
-Framework utility was invoked for any legitimate purpose at all. There was never an opportunity for
-a false positive. That satisfies the letter of the test plan and not its spirit.
-
-### The rule that returned zero
-
-The vault rule, the most durable logic of the three and the one that survives every evasion that
-defeats the other two, returned **nothing**. Not in the detonation window, not in ninety days.
-
-That August detonation raised `Suspicious Vault Client Image Load` four times, so the library load
-certainly happened. Querying that window on the field this estate actually populates for module
-loads returns **23 documents** containing `vaultcli.dll`. Querying the field the conversion pipeline
-chose returns **0**. Estate-wide across ninety days the split is **39,033 documents against 9**.
-
-The logic was never wrong. `ImageLoaded` is the correct Sigma field for `category: image_load`, and
-hard-coding this estate's field name would have stopped it being a Sigma rule. The entire point of
-a generic logsource is that the mapping lives in the pipeline. What was missing was a pipeline that
-knows where this estate's module loads land.
-
-**It was withdrawn rather than shipped.** A rule that converts cleanly, passes every validator and
-returns zero does not look broken. It looks like a quiet estate. Shipped, it would have stood as
-evidence the credential vault was never touched, on a host where it demonstrably was, twice. One
-working pipeline restores it unchanged.
-
-
-## What this detonation actually taught
-
-Five things, in ascending order of how much they cost to learn.
-
-1. **An argument list can be the detection.** The strongest single signal in 10,652 documents was a
-   command line with nothing in it. No hash, no domain, no exotic API. A signed Microsoft binary
-   invoked in a way that cannot do its job.
-2. **Destination-based logic fails behind a proxy.** The endpoint agent recorded the proxy. If the
-   rule had tested for an external address, the C2 channel would have been invisible to it, on an
-   estate configured exactly as most managed estates are.
-3. **Sighting counts are not corroboration.** Thirty rollups of one flow look identical to thirty
-   connections unless you read `event.start` and `community_id`. This is the kind of error that gets
-   more convincing as it propagates.
-4. **Reading the compiled query is not optional, and running it matters even more.** Two of three
-   rules passed `sigma check` and would have shipped broken, and the third only revealed itself as
-   undeployable when a real query went to a real index. Neither failure is exotic; both are field-mapping mismatches between
-   a generic logsource and a specific schema, which is the normal case, not the edge case.
-5. **An unsourced inference that narrows a rule passes every tool in the chain.** The clause
-   restricting the parent to a user-writable path would have created a silent blind spot, and
-   nothing in the validation chain flagged it. It surfaced only when each condition was labelled
-   with where it came from, under a constraint that an unsourced one may not tighten the match.
+The honest caveat is the estate. Two hosts report process telemetry and only one runs Windows. Zero
+false positives here means zero on a single lab workstation, during which no .NET Framework utility
+was invoked for any legitimate purpose at all. There was never an opportunity for a false positive.
 
 ---
 
-The rules, their validation notes and the package summary are in
+The rules, their validation notes and the test results are in
 [`detections/sigma`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detections/sigma)
 and
 [`detonations/2026-10-27-agent-tesla-regsvcs-hollowing`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detonations/2026-10-27-agent-tesla-regsvcs-hollowing).
-Every rule is a draft for testing. None of them has run against production data, and the retrohunt
-in each note is a prerequisite, not a suggestion.
+Both are drafts for testing. Neither has run against a populated estate, and the retrohunt in each
+validation note is a prerequisite rather than a suggestion.
