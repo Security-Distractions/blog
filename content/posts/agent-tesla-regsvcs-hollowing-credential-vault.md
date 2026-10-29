@@ -219,8 +219,14 @@ suppressing the noisy half suppresses the useful half.
 
 | Rule | Targets | Level |
 |---|---|---|
-| `proc_creation_win_dotnet_framework_utility_no_arguments` | a .NET utility started with an empty argument list | high |
-| `net_connection_win_dotnet_framework_utility_outbound` | a .NET utility opening a socket, with no destination condition | medium |
+| [`proc_creation_win_dotnet_framework_utility_no_arguments`](https://github.com/Security-Distractions/cti-driven-detection-engine/blob/main/detections/sigma/proc_creation_win_dotnet_framework_utility_no_arguments.yml) | a .NET utility started with an empty argument list | high |
+| [`net_connection_win_dotnet_framework_utility_outbound`](https://github.com/Security-Distractions/cti-driven-detection-engine/blob/main/detections/sigma/net_connection_win_dotnet_framework_utility_outbound.yml) | a .NET utility opening a socket, with no destination condition | medium |
+
+Each rule links to its YAML. The validation notes sit beside them
+([spec](https://github.com/Security-Distractions/cti-driven-detection-engine/blob/main/detections/sigma/proc_creation_win_dotnet_framework_utility_no_arguments.validation.md),
+[network](https://github.com/Security-Distractions/cti-driven-detection-engine/blob/main/detections/sigma/net_connection_win_dotnet_framework_utility_outbound.validation.md)) and carry the
+evidence ledger, the false positives with a tuning action for each, the residual evasion gaps and
+the test plan.
 
 The first is the more fragile. One junk argument on the `RegSvcs.exe` command line defeats it, so it
 is a rule about current tradecraft rather than about the technique. The second survives that, which
@@ -294,9 +300,12 @@ was invoked for any legitimate purpose at all. There was never an opportunity fo
 
 ---
 
-The rules, their validation notes and the test results are in
-[`detections/sigma`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detections/sigma)
-and
+The rules and their validation notes are in
+[`detections/sigma`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detections/sigma).
+The detonation write-up, the package summary and the full
+[test results](https://github.com/Security-Distractions/cti-driven-detection-engine/blob/main/detonations/2026-10-27-agent-tesla-regsvcs-hollowing/TEST-RESULTS.md)
+are in
 [`detonations/2026-10-27-agent-tesla-regsvcs-hollowing`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detonations/2026-10-27-agent-tesla-regsvcs-hollowing).
-Both are drafts for testing. Neither has run against a populated estate, and the retrohunt in each
-validation note is a prerequisite rather than a suggestion.
+
+Both rules are drafts for testing. Neither has run against a populated estate, and the retrohunt in
+each validation note is a prerequisite rather than a suggestion.
