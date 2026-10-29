@@ -6,7 +6,7 @@
 
   Reads site.Data.detonations.<key>. Attribution comes from the abuse.ch ThreatFox and
   MalwareBazaar feeds matched by exact SHA256, so the panel says so rather than implying
-  the label is authoritative — community labels are evidence, not ground truth.
+  the label is authoritative, since community labels are evidence rather than ground truth.
 */ -}}
 {{- $key := .Get "key" -}}
 {{- $d := index site.Data.detonations $key -}}
@@ -43,6 +43,15 @@
   </dl>
   {{- /* Indicators and ATT&CK have their own sections; this panel carries attribution only,
          so the same facts are not printed three times in one report. */ -}}
+  {{- /* Provenance comes from the data file where it is given, because not every attribution
+         arrives from the same place: a commercial intelligence card and a community feed are
+         different kinds of evidence and the panel must not claim the wrong one. Posts with no
+         attribution_source keep the original abuse.ch wording, so nothing already published
+         changes. */ -}}
+  {{- with $d.attribution_source }}
+  <p class="cti-foot">{{ . | markdownify }}</p>
+  {{- else }}
   <p class="cti-foot">Family attribution from the abuse.ch ThreatFox and MalwareBazaar feeds,
     matched by exact SHA256. Community-sourced labels, treated as evidence rather than ground truth.</p>
+  {{- end }}
 </div>

@@ -17,7 +17,10 @@
 {{- end -}}
 {{- $max := int (.Get "max" | default (len $d.alerts)) -}}
 {{- $shown := first $max $d.alerts -}}
-{{- $sigma := where $d.alerts "rule" "like" "[Sigma]*" -}}
+{{- /* "like" takes a Go regexp, so the brackets must be escaped: "[Sigma]*" is a character
+       class repeated zero or more times, which matches every rule name and labelled every post
+       as entirely Sigma-derived. */ -}}
+{{- $sigma := where $d.alerts "rule" "like" "^\\[Sigma\\] " -}}
 {{- $top := 1 -}}
 {{- with index $d.alerts 0 }}{{ $top = .count }}{{ end -}}
 <div class="alert-table">
@@ -26,7 +29,7 @@
     <span class="alert-table-meta">{{ $d.total_alerts }} alert{{ if ne $d.total_alerts 1 }}s{{ end }} · {{ len $d.alerts }} rule{{ if ne (len $d.alerts) 1 }}s{{ end }}{{ with $sigma }} · {{ len . }} Sigma-derived{{ end }}</span>
   </div>
   {{- if eq (len $d.alerts) 0 }}
-  <p class="alert-table-empty">No alerts are recorded for this sample — see the analysis above for
+  <p class="alert-table-empty">No alerts are recorded for this sample. See the analysis above for
      what that means.</p>
   {{- else }}
   <ol class="alert-rows">
@@ -46,7 +49,7 @@
   {{- end }}
   {{- if eq $d.alerts_source "host+window" }}
   <p class="alert-table-foot">These alerts were not linked to the Elastic case, so they are counted by
-    querying the alert index for this host across the detonation window — which is also why the total
+    querying the alert index for this host across the detonation window, which is also why the total
     is higher than the figure quoted in the original investigation notes.</p>
   {{- end }}
   {{- with $d.severity }}

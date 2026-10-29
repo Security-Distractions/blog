@@ -26,7 +26,7 @@
       <tbody>
         {{- range . }}
         <tr><td class="ioc-t">{{ .type }}</td><td><code>{{ .value }}</code>
-          {{- with .note }} <span class="ioc-note">— {{ . }}</span>{{ end }}</td></tr>
+          {{- with .note }} <span class="ioc-note">{{ . }}</span>{{ end }}</td></tr>
         {{- end }}
       </tbody>
     </table>

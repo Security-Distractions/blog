@@ -5,7 +5,7 @@
     {{< mitre key="valleyrat_shellcode_loader" >}}
 
   Reads site.Data.detonations.<key>. Tactics carry the alert count that evidenced them, so a
-  tactic claimed here is a tactic something actually fired on — not an aspiration.
+  tactic claimed here is a tactic something actually fired on, not an aspiration.
 */ -}}
 {{- $key := .Get "key" -}}
 {{- $d := index site.Data.detonations $key -}}
