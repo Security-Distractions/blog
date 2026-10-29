@@ -21,7 +21,8 @@ summary: "An Agent Tesla dropper hollowed the signed .NET registration utility R
   which exposed a reasonable inference that quietly narrowed the rule past the behaviour it was
   written for.
 - Run against 90 days of live data the two rules produced **19 hits, every one a true positive,
-  across two independent Agent Tesla samples**.
+  across two independent Agent Tesla samples**. Deployed into the detection engine and tested
+  against a fresh detonation of the same sample, **both fired**.
 {{< /takeaways >}}
 
 ## Case Summary
@@ -267,6 +268,40 @@ The honest caveat is the estate. Two hosts report process telemetry and only one
 false positives here means zero on a single lab workstation, during which no .NET Framework utility
 was invoked for any legitimate purpose at all. There was never an opportunity for a false positive.
 
+## Deploying them, and detonating again
+
+A retrohunt shows a rule would have matched. It does not show that the rule, as deployed, fires.
+Those are different claims, so both rules went into the detection engine as enabled query rules and
+the same sample was detonated again.
+
+**Both fired.** The spawn rule raised two alerts and the network rule raised two, all on the
+hollowed `RegSvcs.exe`, alongside the endpoint product's own behavioural alerts on the same chain.
+Two independent detection layers agreeing on one intrusion is the result worth having.
+
+Two things came out of it that the retrohunt could not have shown.
+
+**The spawn rule alerted from two separate telemetry sources**, the endpoint process events and the
+Sysmon channel. That only worked because of a bug caught on the way in. The deployed query was first
+written against the `.caseless` sub-field of the command line, copying the house convention from an
+older rule. That sub-field is populated on the endpoint index and **does not exist on the Sysmon
+index at all**, so matching on it alone silently dropped every Sysmon process-creation event. The
+rule looked healthy and carried half the coverage it claimed. Matching both the base field and the
+sub-field restores it, and the second alert is the proof.
+
+It is the same failure as the pipeline mismatch described earlier, one layer further down: a field
+that exists in one index and not another, a query that compiles cleanly either way, and a zero that
+reads like a quiet estate.
+
+**The dropper staged itself somewhere new.** Same sample, but this time it ran directly from the
+Downloads directory rather than from a subdirectory named after its own hash. The rule did not care,
+because the clause that would have cared was removed before deployment. That clause required the
+parent to sit in one of a handful of user-writable paths, and it was the inference the evidence
+ledger threw out.
+
+None of this promotes the rules. Both stay `status: experimental`. A lab true positive on the sample
+a rule was drafted from is the weakest kind of confirmation there is, and it still leaves the false
+positive question untouched.
+
 ---
 
 The rules and their validation notes are in
@@ -276,5 +311,6 @@ The detonation write-up, the package summary and the full
 are in
 [`detonations/2026-10-27-agent-tesla-regsvcs-hollowing`](https://github.com/Security-Distractions/cti-driven-detection-engine/tree/main/detonations/2026-10-27-agent-tesla-regsvcs-hollowing).
 
-Both rules are drafts for testing. Neither has run against a populated estate, and the retrohunt in
-each validation note is a prerequisite rather than a suggestion.
+Both rules are drafts for testing. Firing on a lab detonation is not the same as surviving a
+populated estate, and the retrohunt in each validation note is a prerequisite rather than a
+suggestion.
