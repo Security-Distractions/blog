@@ -1,0 +1,201 @@
+{
+  "slug": "agent-tesla-regsvcs-hollowing",
+  "folder": "2026-10-27-agent-tesla-regsvcs-hollowing",
+  "title": "Agent Tesla hollowed into RegSvcs.exe , credential vault and browser store access",
+  "date": "2026-10-27",
+  "family": "Agent Tesla",
+  "family_adopted": true,
+  "sha256": "fdc9cb253a2ebb99df48133a5c2e0d35cfa5fb4ee7578f6648bded8b5187b42c",
+  "host": "analysis-host",
+  "first": "2026-10-27T21:20:27.6223565Z",
+  "last": "2026-10-27T21:30:18.370Z",
+  "total_alerts": 35,
+  "alerts_source": "host+window",
+  "alerts": [
+    {
+      "rule": "Threat Intel Hash Indicator Match",
+      "count": 6
+    },
+    {
+      "rule": "Access to Windows Passwords Vault by Unusual Process",
+      "count": 6
+    },
+    {
+      "rule": "Suspicious Vault Client Image Load",
+      "count": 3
+    },
+    {
+      "rule": "Suspicious Suspended Process Creation",
+      "count": 3
+    },
+    {
+      "rule": "Suspicious Remote Memory Allocation",
+      "count": 3
+    },
+    {
+      "rule": "Remote Thread Context Manipulation",
+      "count": 3
+    },
+    {
+      "rule": "Network Connection via Process with Unusual Arguments",
+      "count": 3
+    },
+    {
+      "rule": "Memory Threat Detection: Windows.Trojan.AgentTesla",
+      "count": 3
+    },
+    {
+      "rule": "Malware Detection Alert",
+      "count": 2
+    },
+    {
+      "rule": "Machine Learning Detected a Suspicious Windows Event with a Low Malicious Probability Score",
+      "count": 1
+    },
+    {
+      "rule": "LLM-Based Attack Chain Triage by Host",
+      "count": 1
+    },
+    {
+      "rule": "Unnamed endpoint alert",
+      "count": 1
+    }
+  ],
+  "severity": {
+    "critical": 19,
+    "high": 6,
+    "low": 1,
+    "unscored": 9
+  },
+  "tactics": [
+    {
+      "name": "Defense Evasion",
+      "count": 14
+    },
+    {
+      "name": "Credential Access",
+      "count": 9
+    }
+  ],
+  "techniques": [
+    {
+      "id": "T1204.002",
+      "name": "User Execution: Malicious File"
+    },
+    {
+      "id": "T1055",
+      "name": "Process Injection"
+    },
+    {
+      "id": "T1055.012",
+      "name": "Process Injection: Process Hollowing"
+    },
+    {
+      "id": "T1218.009",
+      "name": "System Binary Proxy Execution: Regsvcs/Regasm"
+    },
+    {
+      "id": "T1036",
+      "name": "Masquerading"
+    },
+    {
+      "id": "T1555",
+      "name": "Credentials from Password Stores"
+    },
+    {
+      "id": "T1555.004",
+      "name": "Credentials from Password Stores: Windows Credential Manager"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "SHA256",
+      "value": "fdc9cb253a2ebb99df48133a5c2e0d35cfa5fb4ee7578f6648bded8b5187b42c",
+      "note": "the sample",
+      "path": "C:\\Users\\analyst\\Downloads\\fdc9cb25…b42c\\fdc9cb25…b42c.exe"
+    }
+  ],
+  "timeline": [
+    {
+      "time": "2026-10-27T21:20:01.7076571Z",
+      "event": "Archive extracted",
+      "detail": "7zFM.exe spawned 7zG.exe to extract the sample into a Downloads subdirectory named after its own SHA256",
+      "tactic": "",
+      "mitre": "",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:20:27.6223565Z",
+      "event": "Sample executed from Explorer",
+      "detail": "Launched by double-click with no arguments; loads clr.dll, so a .NET assembly",
+      "tactic": "Execution",
+      "mitre": "T1204.002",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:20:59.3014254Z",
+      "event": "RegSvcs.exe spawned with no arguments",
+      "detail": "The signed .NET registration utility started as a hollowing container, with a command line consisting of nothing but its own quoted path",
+      "tactic": "Defense Evasion",
+      "mitre": "T1218.009",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:20:59.4158534Z",
+      "event": "Dropper exits",
+      "detail": "114 ms after spawning the container, leaving the payload running inside a trusted Microsoft binary",
+      "tactic": "Defense Evasion",
+      "mitre": "T1055.012",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:20:59.5053864Z",
+      "event": "WMI client stack loaded",
+      "detail": "wmiutils.dll, wbemcomn.dll, wbemprox.dll, WMINet_Utils.dll, wbemsvc.dll and fastprox.dll loaded into RegSvcs.exe within 150 ms",
+      "tactic": "Discovery",
+      "mitre": "T1082",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:21:01.6059121Z",
+      "event": "Outbound connection from RegSvcs.exe",
+      "detail": "To the internal proxy on 3128, the only destination host telemetry ever records on this estate",
+      "tactic": "Command and Control",
+      "mitre": "T1071",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:21:02.1831623Z",
+      "event": "Chrome and Edge credential stores opened",
+      "detail": "Login Data read from both browser profiles, 18 ms apart",
+      "tactic": "Credential Access",
+      "mitre": "T1555.003",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:21:02.2349082Z",
+      "event": "Windows Credential Vault client loaded",
+      "detail": "vaultcli.dll loaded into RegSvcs.exe, which has no credential-handling role",
+      "tactic": "Credential Access",
+      "mitre": "T1555.004",
+      "source": "process"
+    },
+    {
+      "time": "2026-10-27T21:21:15.934Z",
+      "event": "Memory scan names the family",
+      "detail": "Windows.Trojan.AgentTesla matched in the memory of the hollowed process, independently of the hash",
+      "tactic": "Defense Evasion",
+      "mitre": "T1055",
+      "source": "alert"
+    },
+    {
+      "time": "2026-10-27T21:22:42.1162197Z",
+      "event": "Socket closed",
+      "detail": "After roughly 100 seconds. No persistence was established and no further sample activity appears in the window",
+      "tactic": "",
+      "mitre": "",
+      "source": "process"
+    }
+  ],
+  "attribution_source": "Family attribution from a Recorded Future intelligence card, matched by exact SHA256 (master ID `hd4fiZ`, risk 65/99, rule *Positive Malware Verdict*), and corroborated independently by an Elastic Defend memory-scan signature on the running process. Two methods on two different artefacts."
+}
