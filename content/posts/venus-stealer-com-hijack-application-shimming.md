@@ -14,7 +14,7 @@ summary: "A Venus Stealer sample established persistence through application shi
   received, nothing exfiltrated.
 - Persistence used **application shimming** via `sdbinst.exe` and **COM registry modification**.
 - **The collection stage was never observed.** The attribution is therefore by indicator, not by
-  observed theft — a distinction worth preserving in any write-up.
+  observed theft, a distinction worth preserving in any write-up.
 - One COM CLSID override pointed at a **Microsoft-signed** `OneDrive.Sync.Service.exe`. That may be
   legitimate OneDrive registration caught in the blast radius rather than malicious persistence, and it
   is left flagged rather than resolved.
@@ -24,7 +24,7 @@ summary: "A Venus Stealer sample established persistence through application shi
 
 Venus Stealer is an unsigned Windows executable that, on execution, attempts **C2 over DNS to a suspicious `.top` domain** and establishes host persistence via **Application Shimming (sdbinst)** and **COM registry modification**. Delivered as a 7-Zip archive and run manually. The C2 domain did not resolve during the run.
 
-**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 16:59 UTC · **Alert window:** 17:00:00–17:02:15 · **Detections:** 31 Elastic Defend alerts · **Telemetry:** healthy (Defend events + Sysmon logging with correct timestamps — full reconstruction available)
+**Host:** `analysis-host` · **User:** `analyst` · **Detonated:** 2026-08-08 16:59 UTC · **Alert window:** 17:00:00–17:02:15 · **Detections:** 31 Elastic Defend alerts · **Telemetry:** healthy (Defend events + Sysmon logging with correct timestamps, full reconstruction available)
 
 ## Initial Access
 
@@ -33,24 +33,24 @@ Venus Stealer is an unsigned Windows executable that, on execution, attempts **C
 
 ## Execution
 
-- `explorer.exe` → **Venus Stealer exe** at 16:59:36 (and again 16:59:41) — user execution.
+- `explorer.exe` → **Venus Stealer exe** at 16:59:36 (and again 16:59:41), user execution.
 - Flagged by ProblemChild ML (`problemchild.prediction=1`).
 
 ## Persistence
 
-- **Application Shimming** — `C:\Windows\System32\sdbinst.exe -m -bg` at 17:02:48 (ProblemChild-flagged) — installs a shim database (T1546.011).
-- **COM registry modification** — per-user CLSID overrides written:
+- **Application Shimming**: `C:\Windows\System32\sdbinst.exe -m -bg` at 17:02:48 (ProblemChild-flagged), installs a shim database (T1546.011).
+- **COM registry modification**: per-user CLSID overrides written:
   - `{47E6DCAF-41F8-441C-BD0E-A50D5FE6C4D1}` and `{917E8742-AA3B-7318-FA12-10485FB322A2}` → `LocalServer32` = `…\AppData\Local\Microsoft\OneDrive\26.129.0706.0004\OneDrive.Sync.Service.exe` (+ WOW6432Node).
-  - ⚠️ The referenced `OneDrive.Sync.Service.exe` is **Microsoft-signed/trusted** — this may be legitimate OneDrive COM registration flagged as suspicious rather than confirmed malicious persistence. **Recommend validation.**
+  - **Caveat:** The referenced `OneDrive.Sync.Service.exe` is **Microsoft-signed/trusted**: this may be legitimate OneDrive COM registration flagged as suspicious rather than confirmed malicious persistence. **Recommend validation.**
 
 ## Command and Control
 
 - Sample issued **DNS queries for `strmer.top`** (suspicious `.top` TLD) at 16:59:40–45 (process `f0a10f8d…272b8.exe`, also via `svchost.exe` DNS client).
-- **Domain did NOT resolve** (`dns.resolved_ip: []`, no firewall egress) — C2 dead/sinkholed in the isolated lab, so no session established. Domain is the key network IOC.
+- **Domain did NOT resolve** (`dns.resolved_ip: []`, no firewall egress), C2 dead/sinkholed in the isolated lab, so no session established. Domain is the key network IOC.
 
 ## Additional observations
 
-- **Malicious Reputation of Executable Download** ×4 — a downloaded/executed component matched a bad-reputation indicator (T1105 Ingress Tool Transfer).
+- **Malicious Reputation of Executable Download** ×4, a downloaded/executed component matched a bad-reputation indicator (T1105 Ingress Tool Transfer).
 
 ## Timeline
 

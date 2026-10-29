@@ -34,17 +34,17 @@ The .NET RAT is a **.NET remote-access trojan (RAT)** with **keylogging**. It se
 
 ## Persistence
 
-- Self-copied to **`C:\Users\analyst\AppData\Roaming\MPC-AH\AggregatorHost.exe`** (identical SHA256) — masquerading as the legitimate System32 `AggregatorHost.exe` ("Potential Masquerading as System32 Executable").
-- **Startup / Run-key persistence** pointing at the copy — "Startup Persistence by a Low Reputation Process" ×4, "Startup Persistence from a Browser/Compression Utility Descendant" ×4, "Startup or Run Key Registry Modification" ×2.
+- Self-copied to **`C:\Users\analyst\AppData\Roaming\MPC-AH\AggregatorHost.exe`** (identical SHA256), masquerading as the legitimate System32 `AggregatorHost.exe` ("Potential Masquerading as System32 Executable").
+- **Startup / Run-key persistence** pointing at the copy, "Startup Persistence by a Low Reputation Process" ×4, "Startup Persistence from a Browser/Compression Utility Descendant" ×4, "Startup or Run Key Registry Modification" ×2.
 
 ## Collection
 
-- **Keystroke capture** — "Keystrokes Input Capture from a Managed Application" ×2 (T1056.001).
+- **Keystroke capture**: "Keystrokes Input Capture from a Managed Application" ×2 (T1056.001).
 
 ## Command and Control
 
-- C2 attempted **via the system proxy the proxy**; **no external egress observed** (dead/sinkholed in the isolated lab) — no external C2 IP/domain captured this run.
-- 2× "Malicious Reputation of Executable Download" (component matched a bad-reputation indicator — T1105).
+- C2 attempted **via the system proxy**; **no external egress observed** (dead/sinkholed in the isolated lab), no external C2 IP/domain captured this run.
+- 2× "Malicious Reputation of Executable Download" (component matched a bad-reputation indicator, T1105).
 
 ## Timeline
 

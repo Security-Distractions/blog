@@ -28,7 +28,7 @@ A PyInstaller-packaged, **PyArmor-obfuscated Python loader** was detonated on `a
 
 Sample: `d97ea10d1dbfe2a69e0d2387e8985635b20628495918abd54c4b052c0acf05b1` (MalwareBazaar; ships in the wild as `composer.php.exe`, imitating a Composer artefact so a developer double-clicking it believes they are opening a PHP file).
 
-**Assessment: a first-stage loader that prepared the ground and declined to deploy.** It carved out Defender exclusions and then never wrote to the path it had just excluded. Because it made *no network attempt at all* — rather than a failed one — the most probable explanation is anti-analysis logic aborting execution, not dead infrastructure. A payload whose C2 was merely unreachable would still show a connection attempt in endpoint telemetry.
+**Assessment: a first-stage loader that prepared the ground and declined to deploy.** It carved out Defender exclusions and then never wrote to the path it had just excluded. Because it made *no network attempt at all*, rather than a failed one, the most probable explanation is anti-analysis logic aborting execution, not dead infrastructure. A payload whose C2 was merely unreachable would still show a connection attempt in endpoint telemetry.
 
 Both the diagram and the step list below are rendered from the Compromise Canvas export, so they are
 the same path the tool draws. Drag to pan, scroll to zoom.
@@ -69,18 +69,18 @@ on-host lifetime approximately 25 seconds.
 
 **No C2, no second-stage download, no exfiltration.** Four independent sources agree:
 
-- **Endpoint network telemetry** — zero connection events attributed to the sample or to any child
+- **Endpoint network telemetry**: zero connection events attributed to the sample or to any child
   process. Elastic Defend records connection *attempts*, so a blocked or failed connection would still
   appear. There were none.
-- **DNS** — nothing resolved during the window beyond ordinary operating-system traffic.
-- **Firewall** — no blocked egress from the host.
-- **Proxy** — every destination in the window belongs to routine operating-system or browser activity,
+- **DNS**: nothing resolved during the window beyond ordinary operating-system traffic.
+- **Firewall**: no blocked egress from the host.
+- **Proxy**: every destination in the window belongs to routine operating-system or browser activity,
   and all of it pre-dates execution.
 
 Because the sample's processes opened no sockets at all, C2 tunnelled inside an allowed session is
 excluded as well.
 
-**No persistence** — no Run keys, scheduled tasks, services or COM hijacking. **No credential access,
+**No persistence**: no Run keys, scheduled tasks, services or COM hijacking. **No credential access,
 collection or lateral movement.** The sample never wrote to the directory it had just excluded from
 Defender.
 

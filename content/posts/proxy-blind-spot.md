@@ -3,7 +3,7 @@ title: "The C2 your endpoint agent never sees"
 date: 2026-08-09
 draft: false
 tags: ["malware", "elastic", "detection", "squid"]
-summary: "When a victim egresses through a proxy, host telemetry stops at the proxy. Here's what that looks like in Elastic — and how a broken log pipeline hid a C2 destination in plain sight."
+summary: "When a victim egresses through a proxy, host telemetry stops at the proxy. Here's what that looks like in Elastic, and how a broken log pipeline hid a C2 destination in plain sight."
 ---
 
 Every endpoint agent on a proxied network shares a blind spot, and it is easy to miss
@@ -12,7 +12,7 @@ until you go looking for a C2 destination and find nothing.
 ## The setup
 
 The detonation host sits on an isolated segment. All of its egress is forced through a
-Squid proxy on the firewall — it has no route to the internet of its own.
+Squid proxy on the firewall, it has no route to the internet of its own.
 
 ```text
 analysis host              perimeter firewall              Internet
@@ -26,7 +26,7 @@ When malware on `analysis-host` beacons out, the endpoint agent faithfully recor
 connection. To the proxy. Every single time, regardless of where the traffic
 is really going.
 
-> The endpoint isn't wrong. It is reporting exactly what the host did — open a socket to
+> The endpoint isn't wrong. It is reporting exactly what the host did, open a socket to
 > the proxy. The destination it *wanted* only exists one hop further on.
 
 ## What each source can actually tell you
@@ -39,7 +39,7 @@ is really going.
 | **Squid access log** | yes | **yes** |
 
 One source out of four holds the answer. If that source is broken, the destination is
-gone — and nothing in the console tells you it's missing.
+gone, and nothing in the console tells you it's missing.
 
 ## Where it went wrong
 
@@ -53,7 +53,7 @@ access_log syslog:local4.info ecsjson
 ```
 
 A `grok` processor met JSON, failed, and dropped the document into the index with its
-fields unextracted. Present, but unqueryable — the worst failure mode, because volume
+fields unextracted. Present, but unqueryable, the worst failure mode, because volume
 graphs look healthy.
 
 ### The fix
@@ -81,7 +81,7 @@ curl -u "$ES_USER:$ES_PASS" \
   -d '{"query":{"exists":{"field":"squid.url.original"}}}'
 ```
 
-From zero parsed records to thousands per day — with full HTTPS URLs, since `sslbump`
+From zero parsed records to thousands per day, with full HTTPS URLs, since `sslbump`
 is decrypting.
 
 ## What to take from this

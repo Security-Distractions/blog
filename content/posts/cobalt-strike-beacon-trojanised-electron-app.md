@@ -30,7 +30,7 @@ The Cobalt Strike loader is delivered as a **trojanized Electron application** (
 ## Execution
 
 - 7-Zip-extracted to `C:\Users\analyst\Downloads\sample\`.
-- `explorer.exe` → **loader** `39c69cb0…6c4f38.exe` (18:07:15) → spawns **`wczt-win-8.1.65-x64).exe`** (18:07:29) — the trojanized Electron installer.
+- `explorer.exe` → **loader** `39c69cb0…6c4f38.exe` (18:07:15) → spawns **`wczt-win-8.1.65-x64).exe`** (18:07:29), the trojanized Electron installer.
 
 ## Persistence
 
@@ -40,14 +40,14 @@ The Cobalt Strike loader is delivered as a **trojanized Electron application** (
 
 ## Defense Evasion
 
-- **Shellcode injection** (Memory Threat ×4), **Network Connect API from Unbacked Memory**, **NTDLL unhooking**, Suspicious NTDLL image load, Shellcode from Low-Reputation Module — EDR evasion.
-- **Timestomping** ×34 ("Potential Timestomp in Executable Files" / spoofed image-load creation time) — T1070.006.
+- **Shellcode injection** (Memory Threat ×4), **Network Connect API from Unbacked Memory**, **NTDLL unhooking**, Suspicious NTDLL image load, Shellcode from Low-Reputation Module, EDR evasion.
+- **Timestomping** ×34 ("Potential Timestomp in Executable Files" / spoofed image-load creation time), T1070.006.
 - Unsigned DLL side-loading from a suspicious folder; execution from unusual directory.
-- ⚠️ "Elastic Defend Alert Followed by Telemetry Loss" ×2 (endpoint telemetry degradation).
+- **Caveat:** "Elastic Defend Alert Followed by Telemetry Loss" ×2 (endpoint telemetry degradation).
 
 ## Command and Control
 
-- **C2 domain: `dm.telegrem.store`** (22 alerts) — Telegram typosquat on abused `.store` TLD.
+- **C2 domain: `dm.telegrem.store`** (22 alerts), Telegram typosquat on abused `.store` TLD.
 - **C2 IPs: `118.107.43.16`, `118.107.43.138`**.
 
 ## Timeline

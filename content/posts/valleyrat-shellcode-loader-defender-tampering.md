@@ -44,19 +44,19 @@ Collapsed to the steps that matter, the same path reads as follows.
 ## Privilege Escalation
 
 - **PowerShell**: `Add-MpPreference -ExclusionPath 'C:\ProgramData','C:\Users','C:\Program Files (x86)','C:\'` (excludes the entire C: drive).
-- **SYSTEM scheduled-task loop**: repeatedly `SCHTASKS /Create /F /TN "Task1" /SC ONCE /RL HIGHEST /RU "SYSTEM" /TR "cmd.exe /c reg add …\Windows Defender\Exclusions…"` → `/Run` → `/Delete` — runs `reg add` as SYSTEM to add Defender exclusions, bypassing UAC (×60 scheduled-task creations).
+- **SYSTEM scheduled-task loop**: repeatedly `SCHTASKS /Create /F /TN "Task1" /SC ONCE /RL HIGHEST /RU "SYSTEM" /TR "cmd.exe /c reg add …\Windows Defender\Exclusions…"` → `/Run` → `/Delete`: runs `reg add` as SYSTEM to add Defender exclusions, bypassing UAC (×60 scheduled-task creations).
 - Also: Defender exclusions via WMI; Disable Defender via PowerShell; **UAC disabled**; **service disabled** via registry; **WDAC policy** written by an unusual process.
-- ⚠️ **Elastic Defend Alert Followed by Telemetry Loss ×4** — the sample degraded endpoint telemetry (EDR tampering).
+- **Caveat:** Elastic Defend Alert Followed by Telemetry Loss ×4. The sample degraded endpoint telemetry (EDR tampering).
 
 ## Defense Evasion
 
 - Dropped/ran **`C:\Users\Public\Br3N37\xhMLks.exe`** (launched via `svchost.exe`).
-- **Shellcode injection & execution** — Memory Threat: Shellcode Injection ×20; Unbacked Shellcode from Unsigned Module; **Direct Syscall from Unsigned Module** (EDR bypass); Network Module Loaded from Suspicious Unbacked Memory; VirtualAlloc from unsigned DLL.
+- **Shellcode injection and execution.** Memory Threat: Shellcode Injection ×20; Unbacked Shellcode from Unsigned Module; **Direct Syscall from Unsigned Module** (EDR bypass); Network Module Loaded from Suspicious Unbacked Memory; VirtualAlloc from unsigned DLL.
 
 ## Command and Control
 
-- **`134.209.42.122`** — **Threat-Intel IP Indicator Match** (62 alerts; bidirectional beaconing). Highest-confidence C2.
-- **`39.103.20.88:443`**, **`47.79.64.254:443`** — endpoint-observed HTTPS egress (Alibaba Cloud ranges).
+- **`134.209.42.122`**: **Threat-Intel IP Indicator Match** (62 alerts; bidirectional beaconing). Highest-confidence C2.
+- **`39.103.20.88:443`**, **`47.79.64.254:443`**: endpoint-observed HTTPS egress (Alibaba Cloud ranges).
 - 29× **Threat-Intel Hash Indicator Match** (sample/components matched known-bad hashes).
 
 ## Timeline

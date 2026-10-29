@@ -8,8 +8,8 @@ summary: "A PyInstaller dropper deployed ScreenConnect as its remote access, exc
 ---
 
 {{< takeaways >}}
-- A **PyInstaller-packaged dropper** installed **ScreenConnect** — legitimate, signed, commercially
-  maintained remote-management software — and used it as its remote access. Writing a custom RAT was
+- A **PyInstaller-packaged dropper** installed **ScreenConnect**: legitimate, signed, commercially
+  maintained remote-management software, and used it as its remote access. Writing a custom RAT was
   unnecessary.
 - The sample added **Defender exclusions covering whole drive letters** (`D:`–`G:`, `X:`–`Z:`), `%Temp%`
   and its own working directory. Anything written there afterwards is invisible to Defender.
@@ -54,12 +54,12 @@ The ScreenConnect RMM loader is a **PyInstaller-packaged Python dropper** that i
 
 ## Command and Control
 
-- **`198.23.185.237:8041`** — ScreenConnect relay (port 8041 = ScreenConnect default), egress confirmed from victim in the firewall firewall logs.
-- Excluded: `172.211.123.249:443` — evaluated and found to be legitimate Azure/Microsoft traffic (svchost/msedge), NOT C2.
+- **`198.23.185.237:8041`**: ScreenConnect relay (port 8041 = ScreenConnect default), egress confirmed from victim in the firewall logs.
+- Excluded: `172.211.123.249:443`, evaluated and found to be legitimate Azure/Microsoft traffic (svchost/msedge), NOT C2.
 
 ## Visibility gap
 
-Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon) is **absent for the detonation window 15:59–16:27**; both resumed at **16:27:20** with `elastic_agent` "failed to index document" errors. Elastic Defend **alerts** (fast path) were unaffected — this reconstruction is alert-derived. Recommend investigating the analysis-host agent event-shipping interruption (possible malware interference with logging vs. an ingest/mapping failure).
+Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon) is **absent for the detonation window 15:59–16:27**; both resumed at **16:27:20** with `elastic_agent` "failed to index document" errors. Elastic Defend **alerts** (fast path) were unaffected, this reconstruction is alert-derived. Recommend investigating the analysis-host agent event-shipping interruption (possible malware interference with logging vs. an ingest/mapping failure).
 
 ---
 
@@ -75,8 +75,7 @@ Raw endpoint **event** telemetry (Elastic Defend `endpoint.events.*` and Sysmon)
 
 ThreatFox labels this hash `elf.kuiper` at confidence 95. Kuiper is ransomware, and the label is not
 adopted here for three reasons: MalwareBazaar reports the artefact as a Windows PE (`magika: pebin`)
-rather than an ELF binary, nothing in the detonation encrypted a file, and the observed behaviour —
-RMM deployment with Defender exclusions — is not consistent with ransomware at this stage.
+rather than an ELF binary, nothing in the detonation encrypted a file, and the observed behaviour, RMM deployment with Defender exclusions, is not consistent with ransomware at this stage.
 
 A Kuiper-adjacent loader whose ransomware stage never executed cannot be excluded, but nothing
 observed supports it.
