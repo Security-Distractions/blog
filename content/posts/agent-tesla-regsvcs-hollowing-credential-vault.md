@@ -1,5 +1,5 @@
 ---
-title: "Agent Tesla in RegSvcs.exe: a credential grab from inside a signed Microsoft binary"
+title: "Agent Tesla hides inside RegSvcs.exe, and two Sigma rules that catch it"
 date: 2026-10-29T10:00:00Z
 draft: false
 tags: ["malware","detonation","elastic","detection","sigma","agent-tesla","process-hollowing"]
