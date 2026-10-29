@@ -16,9 +16,9 @@ summary: "An Agent Tesla dropper hollowed the signed .NET registration utility R
   **No persistence was established at all.** No Run key, no scheduled task, no service.
 - The only destination host telemetry ever recorded was the **internal proxy**. Any detection that
   filters on "external destination" would have seen nothing.
-- **One indicator in the enrichment was not this sample's.** `198.23.185.237` is the ScreenConnect
-  relay from an earlier detonation, still beaconing from the host. Its "30 sightings" were 30
-  rollups of a single flow that began before the sample ran.
+- **One indicator in the enrichment was not this sample's.** `198.23.185.237` predates the
+  detonation and belongs to unrelated host traffic. Its "30 sightings" were 30 rollups of a single
+  flow, not 30 connections.
 - Two draft Sigma rules came out of it, and **both carried a defect no validator catches**. One was
   caught by reading the compiled query, the other by labelling each condition against the evidence,
   which exposed a reasonable inference that quietly narrowed the rule past the behaviour it was
@@ -146,23 +146,18 @@ believed.
 
 It is not this sample's. The telemetry is unambiguous:
 
-- there is exactly **one** TCP session to it, `<analysis-host-ip>:57803 → 198.23.185.237:8041`, one
-  `network.community_id`, and its `event.start` is **21:16:48.667Z**, which is *before* the sample
-  executed at 21:20:27;
+- there is exactly **one** TCP session to it, carrying one `network.community_id`, and its
+  `event.start` is **21:16:48.667Z**, which is *before* the sample executed at 21:20:27;
 - the **30 sightings are 30 repeats of that one flow**, because Packetbeat re-reports a live flow
   on a fixed interval. Thirty rollups of one connection is not thirty connections;
-- `ScreenConnect.WindowsClient.exe` is installed at `C:\Program Files (x86)\Windows VC\` and runs as
-  `"RunRole" "<guid>" "System"`, logging a service event throughout the window;
-- port **8041** is the ScreenConnect relay default, and `198.23.185.237:8041` is written down as the
-  ScreenConnect relay in the August RMM-abuse write-up from this same lab;
-- the hollowed `RegSvcs.exe` never touched it.
+- the hollowed `RegSvcs.exe` never touched it. Its only destination was the proxy, and the sandbox
+  reported 0 C2 indicators for the sample, which agrees.
 
-So the August implant is still alive on the analysis host, and it put a VPS in Utah into October's
-indicator set. Lab hygiene is the smaller problem that exposes.
+It is unrelated host traffic that happened to be open across the capture window.
 
-The larger problem is **sighting counts**. "30 local sightings" reads like corroboration. It was
-one flow, counted thirty times by a rollup interval, and the only thing that distinguishes the two
-is looking at `event.start` and `network.community_id` rather than the row count. Any enrichment
+The lesson is about **sighting counts**. "30 local sightings" reads like corroboration. It was one
+flow, counted thirty times by a rollup interval, and the only thing that distinguishes the two is
+looking at `event.start` and `network.community_id` rather than the row count. Any enrichment
 pipeline that scores confidence by how many times an indicator appears in local telemetry will make
 this mistake, and it will make it in the direction of over-confidence.
 
@@ -195,7 +190,7 @@ software file. It has 21 local sightings in this capture and it is the second
 most-seen hash in the capture, and publishing it would have people hunting for a file on every
 Windows host with .NET installed. The abused binary is not the malicious one.
 
-`198.23.185.237` is absent for the reason given above.
+`198.23.185.237` is absent because it is unrelated to this sample, for the reasons set out above.
 
 The dropper's other hashes, for feed matching: MD5 `afeb6d5fc91e7f54feb84544c13f086e`, SHA1
 `c8fc8fdc508bfdbacced8192b229233f095e5771`. The MD5 has no entity of its own in the enrichment and
