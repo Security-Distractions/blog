@@ -16,9 +16,6 @@ summary: "An Agent Tesla dropper hollowed the signed .NET registration utility R
   **No persistence was established at all.** No Run key, no scheduled task, no service.
 - The only destination host telemetry ever recorded was the **internal proxy**. Any detection that
   filters on "external destination" would have seen nothing.
-- **One indicator in the enrichment was not this sample's.** `198.23.185.237` predates the
-  detonation and belongs to unrelated host traffic. Its "30 sightings" were 30 rollups of a single
-  flow, not 30 connections.
 - Two draft Sigma rules came out of it, and **both carried a defect no validator catches**. One was
   caught by reading the compiled query, the other by labelling each condition against the evidence,
   which exposed a reasonable inference that quietly narrowed the rule past the behaviour it was
@@ -56,8 +53,7 @@ still running.
 | Independent corroboration | Elastic Defend memory scan matched `Windows.Trojan.AgentTesla` inside the hollowed process, which is a different method on a different artefact |
 
 Attribution adopted. Two methods agree on the family: a hash-keyed sandbox verdict, and a memory
-signature read from the running process. That is a stronger position than either alone. The sandbox's
-zero-C2-indicator finding bears on the indicator section below.
+signature read from the running process. That is a stronger position than either alone.
 
 ## Execution
 
@@ -133,33 +129,8 @@ destination the endpoint agent can record on a proxied estate. A detection rule 
 utility connected to an external address" would not have fired here. One testing for "a .NET utility
 opened a socket at all" would.
 
-No DNS query and no TLS SNI is attributable to the sample. Triage reported 0 C2 indicators, and
-nothing in this capture contradicts that.
-
-## The indicator that was not ours
-
-The enrichment file lists `198.23.185.237` as an external destination with **30 local sightings**,
-ASN 63025, NOHAVPS LLC, Draper, Utah, with three low-confidence risk rules behind it. The enrichment
-was careful about it and recorded it as *not a confirmed command-and-control host*, but it is still
-sitting in an indicator list for an Agent Tesla detonation, and that is how an indicator gets
-believed.
-
-It is not this sample's. The telemetry is unambiguous:
-
-- there is exactly **one** TCP session to it, carrying one `network.community_id`, and its
-  `event.start` is **21:16:48.667Z**, which is *before* the sample executed at 21:20:27;
-- the **30 sightings are 30 repeats of that one flow**, because Packetbeat re-reports a live flow
-  on a fixed interval. Thirty rollups of one connection is not thirty connections;
-- the hollowed `RegSvcs.exe` never touched it. Its only destination was the proxy, and the sandbox
-  reported 0 C2 indicators for the sample, which agrees.
-
-It is unrelated host traffic that happened to be open across the capture window.
-
-The lesson is about **sighting counts**. "30 local sightings" reads like corroboration. It was one
-flow, counted thirty times by a rollup interval, and the only thing that distinguishes the two is
-looking at `event.start` and `network.community_id` rather than the row count. Any enrichment
-pipeline that scores confidence by how many times an indicator appears in local telemetry will make
-this mistake, and it will make it in the direction of over-confidence.
+No DNS query and no TLS SNI is attributable to the sample. The sandbox reported 0 C2 indicators,
+and nothing in this capture contradicts that.
 
 ## Timeline
 
@@ -182,15 +153,13 @@ duplicated coverage.
 
 {{< indicators key="agent_tesla_regsvcs_hollowing" >}}
 
-Two things are deliberately missing from that table.
+One thing is deliberately missing from that table.
 
 `083bc9319eb8066131b8005dd7013f85f2a27c7908767f94183d3e153b8db12b` is **not an indicator**. It is
 `RegSvcs.exe` itself, 39,400 bytes of .NET Framework v4.0.30319, catalogued by NIST as a known
 software file. It has 21 local sightings in this capture and it is the second
 most-seen hash in the capture, and publishing it would have people hunting for a file on every
 Windows host with .NET installed. The abused binary is not the malicious one.
-
-`198.23.185.237` is absent because it is unrelated to this sample, for the reasons set out above.
 
 The dropper's other hashes, for feed matching: MD5 `afeb6d5fc91e7f54feb84544c13f086e`, SHA1
 `c8fc8fdc508bfdbacced8192b229233f095e5771`. The MD5 has no entity of its own in the enrichment and
